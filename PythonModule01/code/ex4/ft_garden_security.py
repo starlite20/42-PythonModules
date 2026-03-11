@@ -10,7 +10,7 @@ class SecurePlant:
             print(
                 f"""\nInvalid operation attempted: """
                 f"""height {height_passed}cm [REJECTED]"""
-                )
+            )
             print("Security: Negative height rejected")
         else:
             self.height = height_passed
@@ -21,7 +21,7 @@ class SecurePlant:
             print(
                 f"\nInvalid operation attempted: """
                 f"""age {age_passed}days [REJECTED]"""
-                )
+            )
             print("Security: Impossible age value rejected")
         else:
             self.age_of_plant = age_passed
@@ -32,12 +32,12 @@ class SecurePlant:
 
     def get_age(self) -> int:
         return (self.age_of_plant)
-        
+
     def current_plant(self):
         print(
             f"""\nCurrent plant: {self.name} """
             f"""({self.height}cm, {self.age_of_plant} days)"""
-            )
+        )
 
 
 if __name__ == "__main__":
