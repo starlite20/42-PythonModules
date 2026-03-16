@@ -72,7 +72,8 @@ class GardenManager:
             current_plant = self.plants[i]
             old_height = current_plant.height
             current_plant.grow()
-            diff = self.GardenStats.calculate_delta(old_height, current_plant.height)
+            diff = self.GardenStats.calculate_delta(
+                old_height, current_plant.height)
             self.total_growth_recorded += diff
             # print(f"{current_plant.name} grew {diff}cm")
 
@@ -83,11 +84,17 @@ class GardenManager:
         counts = {"plant": 0, "flowering": 0, "prize flower": 0}
         for i in range(len(self.plants)):
             current_plant = self.plants[i]
-            counts[current_plant.type_label] += 1         
+            counts[current_plant.type_label] += 1
             print(f"- {current_plant.get_info()}")
 
-        print(f"\nPlants added: {len(self.plants)}, Total growth: {self.total_growth_recorded}cm")
-        print(f"Plant types: {counts['plant']} regular, {counts['flowering']} flowering, {counts['prize flower']} prize flowers")
+        print(
+            f"\nPlants added: {len(self.plants)}, Total growth: {self.total_growth_recorded}cm")
+        print(
+            f"Plant types: {counts['plant']} regular, {counts['flowering']} flowering, {counts['prize flower']} prize flowers")
+
+    @classmethod
+    def get_total_garden_count(cls):
+        return cls.total_gardens
 
     @classmethod
     def create_garden_network(cls, names):
@@ -100,7 +107,7 @@ class GardenManager:
 
 if __name__ == "__main__":
     print("=== Garden Management System Demo ===\n")
-    
+
     network = GardenManager.create_garden_network(["Alice", "Bob"])
     alice = network[0]
     bob = network[1]
@@ -120,4 +127,4 @@ if __name__ == "__main__":
     bob_score = GardenManager.GardenStats.sum_scores(bob.plants)
 
     print(f"Garden scores - Alice: {alice_score}, Bob: {bob_score}")
-    print(f"Total gardens managed: {GardenManager.total_gardens}")
+    print(f"Total gardens managed: {GardenManager.get_total_garden_count()}")
