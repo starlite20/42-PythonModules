@@ -20,10 +20,10 @@ class Flower(Plant):
         self.color = color
         self.update_plant_type("Flower")
 
-    def bloom(self):
+    def bloom(self) -> None:
         print(f"{self.name} is blooming beautifully!")
 
-    def display(self):
+    def display(self) -> None:
         print(f"{self.get_base_info()}, {self.color} color")
 
 
@@ -33,11 +33,11 @@ class Tree(Plant):
         self.trunk = trunk
         self.update_plant_type("Tree")
 
-    def produce_shade(self):
+    def produce_shade(self) -> None:
         shade_area = self.trunk * 1.58
         print(f"{self.name} provides {shade_area:.0f} square meters of shade")
 
-    def display(self):
+    def display(self) -> None:
         print(f"{self.get_base_info()}, {self.trunk}cm diameter")
 
 
@@ -50,10 +50,10 @@ class Vegetable(Plant):
         self.nutri = nutri
         self.update_plant_type("Vegetable")
 
-    def nutrition_value(self):
+    def nutrition_value(self) -> None:
         print(f"{self.name} is rich in {self.nutri}")
 
-    def display(self):
+    def display(self) -> None:
         print(f"{self.get_base_info()}, {self.harvest} harvest")
 
 

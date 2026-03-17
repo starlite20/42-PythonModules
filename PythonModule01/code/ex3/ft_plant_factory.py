@@ -1,10 +1,10 @@
 class Plant:
-    def __init__(self, name: str, height: int, age_of_plant: int):
+    def __init__(self, name: str, height: int, age_of_plant: int) -> None:
         self.name = name
         self.height = height
         self.age_of_plant = age_of_plant
 
-    def creation_log(self):
+    def creation_log(self) -> None:
         print(
             f"""Created: {self.name} """
             f"""({self.height}cm, {self.age_of_plant} days)"""

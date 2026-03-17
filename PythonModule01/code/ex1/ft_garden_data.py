@@ -4,7 +4,7 @@ class Plant:
         self.height = height
         self.age_of_plant = age_of_plant
 
-    def print_plant(self):
+    def print_plant(self) -> None:
         print(f"{self.name}: {self.height}cm, {self.age_of_plant} days old")
 
 

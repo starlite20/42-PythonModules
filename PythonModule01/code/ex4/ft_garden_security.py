@@ -33,7 +33,7 @@ class SecurePlant:
     def get_age(self) -> int:
         return (self.age_of_plant)
 
-    def current_plant(self):
+    def current_plant(self) -> None:
         print(
             f"""\nCurrent plant: {self.name} """
             f"""({self.height}cm, {self.age_of_plant} days)"""

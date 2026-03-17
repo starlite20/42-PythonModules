@@ -93,7 +93,7 @@ class GardenManager:
             f"Plant types: {counts['plant']} regular, {counts['flowering']} flowering, {counts['prize flower']} prize flowers")
 
     @classmethod
-    def get_total_garden_count(cls):
+    def get_total_garden_count(cls) -> int:
         return cls.total_gardens
 
     @classmethod
@@ -101,7 +101,7 @@ class GardenManager:
         return [cls(name) for name in names]
 
     @staticmethod
-    def validate_height(h):
+    def validate_height(h) -> bool:
         return h > 0
 
 

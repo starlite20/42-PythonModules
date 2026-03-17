@@ -1,4 +1,4 @@
-def ft_garden_intro():
+def ft_garden_intro() -> None:
     print("=== Welcome to My Garden ===")
     print("Plant: Rose")
     print("Height: 25cm")
