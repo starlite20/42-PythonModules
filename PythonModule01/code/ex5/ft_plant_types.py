@@ -1,21 +1,49 @@
 class Plant:
-    def __init__(self, name: str, height: int, age: int) -> None:
+    def __init__(self, name: str, height: float = 0.0, age_of_plant: int = 0) -> None:
         self.name = name
-        self.height = height
-        self.age = age
-        self.type_name = "Plant"
+        self._height = height if height >= 0 else 0.0
+        self._age_of_plant = age_of_plant if age_of_plant >= 0 else 0
 
-    def get_base_info(self) -> str:
-        return (
-            f"""\n{self.name} ({self.type_name}): """
-            f"""{self.height}cm, {self.age} days""")
+    def show(self) -> None:
+        print(f"{self.name}: {self._height}cm, {self._age_of_plant} days old")
 
-    def update_plant_type(self, new_type_name: str) -> None:
-        self.type_name = new_type_name
+    def grow(self) -> None:
+        self._height = round(self._height + 0.8, 2)
+
+    def age(self) -> None:
+        self._age_of_plant += 1
+
+    def creation_log(self) -> None:
+        print("Created: ", end="")
+        self.show()
+
+    def set_height(self, height_passed) -> None:
+        if (height_passed < 0):
+            print("Error, height can't be negative\nHeight update rejected")
+        else:
+            self._height = height_passed
+            print(f"Height updated: {round(self._height,1)}cm")
+
+    def set_age(self, age_passed) -> None:
+        if (age_passed < 0):
+            print("Error, age can't be negative\nAge update rejected")
+        else:
+            self._age_of_plant = age_passed
+            print(f"Age updated: {self._age_of_plant} days")
+
+    def get_height(self) -> float:
+        return (self._height)
+
+    def get_age(self) -> float:
+        return (self._age_of_plant)
+
+    def current_state(self) -> None:
+        print("\nCurrent state: ", end="")
+        self.show()
 
 
 class Flower(Plant):
-    def __init__(self, name: str, height: int, age: int, color: str) -> None:
+    def __init__(self, name: str, height: float, age: int, color: str) -> None:
         super().__init__(name, height, age)
         self.color = color
         self.update_plant_type("Flower")
@@ -28,7 +56,7 @@ class Flower(Plant):
 
 
 class Tree(Plant):
-    def __init__(self, name: str, height: int, age: int, trunk: int) -> None:
+    def __init__(self, name: str, height: float, age: int, trunk: int) -> None:
         super().__init__(name, height, age)
         self.trunk = trunk
         self.update_plant_type("Tree")
@@ -43,7 +71,7 @@ class Tree(Plant):
 
 class Vegetable(Plant):
     def __init__(
-            self, name: str, height: int, age: int, harvest: str, nutri: str
+            self, name: str, height: float, age: int, harvest: str, nutri: str
             ) -> None:
         super().__init__(name, height, age)
         self.harvest = harvest

@@ -1,42 +1,31 @@
 class Plant:
-    def __init__(self, name: str, height: int, age_of_plant: int) -> None:
+    def __init__(self, name: str, height: float, age_of_plant: int) -> None:
         self.name = name
         self.height = height
         self.age_of_plant = age_of_plant
 
-    def get_info(self) -> None:
-        return f"{self.name}: {self.height}cm, {self.age_of_plant} days old"
+    def show(self) -> None:
+        print(f"{self.name}: {self.height}cm, {self.age_of_plant} days old")
 
     def grow(self) -> None:
-        self.height += 1
+        self.height = round(self.height + 0.8, 2)
 
     def age(self) -> None:
         self.age_of_plant += 1
 
 
 if __name__ == "__main__":
-    garden = [
-        Plant("Rose", 25, 30),
-        Plant("Sunflower", 80, 45),
-        Plant("Cactus", 15, 120)
-    ]
+    print("=== Garden Plant Growth ===")
 
-    initial_heights = []
-    for plant in garden:
-        initial_heights.append(plant.height)
+    garden_plant = Plant("Rose", 25.0, 30)
 
-    print("=== Day 1 ===")
-    for plant in garden:
-        print(plant.get_info())
+    initial_heights = garden_plant.height
 
-    for day in range(6):
-        for plant in garden:
-            plant.grow()
-            plant.age()
+    for day in range(7):
+        print(f"=== Day {day + 1} ===")
+        garden_plant.show()
+        garden_plant.grow()
+        garden_plant.age()
 
-    print("=== Day 7 ===")
-    for plant in garden:
-        print(plant.get_info())
-
-    growth = garden[0].height - initial_heights[0]
-    print(f"Growth this week: +{growth}cm")
+    growth = round(garden_plant.height - initial_heights)
+    print(f"Growth this week: {growth}cm")
