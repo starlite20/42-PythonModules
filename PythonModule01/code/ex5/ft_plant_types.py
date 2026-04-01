@@ -54,12 +54,18 @@ class Flower(Plant):
         super().__init__(name, height, age)
         self.color = color
         self.update_plant_type("Flower")
+        self.bloom_state = False
 
     def bloom(self) -> None:
-        print(f"{self.name} is blooming beautifully!")
+        print(f"[asking the {self.name} to bloom]")
 
     def show(self) -> None:
-        print(f"{self.get_base_info()}, {self.color} color")
+        super().show()
+        print(f" Color: {self.color}")
+        if self.bloom_state:
+            print(f" {self.name} is blooming beautifully!")
+        else:
+            print(f" {self.name} has not bloomed yet")
 
 
 class Tree(Plant):
@@ -93,7 +99,7 @@ class Vegetable(Plant):
 if __name__ == "__main__":
     print("=== Garden Plant Registry ===")
 
-    flower = Flower("Rose", 25, 30, "red")
+    flower = Flower("Rose", 15.0, 10, "red")
     flower.creation_log()
 
     tree = Tree("Oak", 500, 1825, 50)
