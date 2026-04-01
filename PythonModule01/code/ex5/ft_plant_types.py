@@ -3,6 +3,7 @@ class Plant:
         self.name = name
         self._height = height if height >= 0 else 0.0
         self._age_of_plant = age_of_plant if age_of_plant >= 0 else 0
+        self.type_name = "Plant"
 
     def show(self) -> None:
         print(f"{self.name}: {self._height}cm, {self._age_of_plant} days old")
@@ -14,15 +15,21 @@ class Plant:
         self._age_of_plant += 1
 
     def creation_log(self) -> None:
-        print("Created: ", end="")
+        print(f"=== {self.type_name}")
         self.show()
+
+    def show_type(self) -> None:
+        print(f"=== {self.type_name}")
+
+    def update_plant_type(self, type_name: str) -> None:
+        self.type_name = type_name
 
     def set_height(self, height_passed) -> None:
         if (height_passed < 0):
             print("Error, height can't be negative\nHeight update rejected")
         else:
             self._height = height_passed
-            print(f"Height updated: {round(self._height,1)}cm")
+            print(f"Height updated: {round(self._height, 1)}cm")
 
     def set_age(self, age_passed) -> None:
         if (age_passed < 0):
@@ -51,59 +58,57 @@ class Flower(Plant):
     def bloom(self) -> None:
         print(f"{self.name} is blooming beautifully!")
 
-    def display(self) -> None:
+    def show(self) -> None:
         print(f"{self.get_base_info()}, {self.color} color")
 
 
 class Tree(Plant):
-    def __init__(self, name: str, height: float, age: int, trunk: int) -> None:
+    def __init__(self, name: str, height: float, age: int, trunk_diameter: int) -> None:
         super().__init__(name, height, age)
-        self.trunk = trunk
+        self.trunk_diameter = trunk_diameter
         self.update_plant_type("Tree")
 
     def produce_shade(self) -> None:
-        shade_area = self.trunk * 1.58
+        shade_area = self.trunk_diameter * 1.58
         print(f"{self.name} provides {shade_area:.0f} square meters of shade")
 
-    def display(self) -> None:
-        print(f"{self.get_base_info()}, {self.trunk}cm diameter")
+    def show(self) -> None:
+        print(f"{self.get_base_info()}, {self.trunk_diameter}cm diameter")
 
 
 class Vegetable(Plant):
-    def __init__(
-            self, name: str, height: float, age: int, harvest: str, nutri: str
-            ) -> None:
+    def __init__(self, name: str, height: float, age: int, harvest_season: str, nutritional_value: str) -> None:
         super().__init__(name, height, age)
-        self.harvest = harvest
-        self.nutri = nutri
+        self.harvest_season = harvest_season
+        self.nutritional_value = nutritional_value
         self.update_plant_type("Vegetable")
 
-    def nutrition_value(self) -> None:
-        print(f"{self.name} is rich in {self.nutri}")
+    def nutritional_valuetion_value(self) -> None:
+        print(f"{self.name} is rich in {self.nutritional_value}")
 
-    def display(self) -> None:
-        print(f"{self.get_base_info()}, {self.harvest} harvest")
+    def show(self) -> None:
+        print(f"{self.get_base_info()}, {self.harvest_season} harvest_season")
 
 
 if __name__ == "__main__":
     print("=== Garden Plant Registry ===")
 
-    garden = [
-        Flower("Rose", 25, 30, "red"),
-        Flower("Jasmine", 15, 10, "white"),
-        Tree("Oak", 500, 1825, 50),
-        Tree("Mango", 600, 2100, 60),
-        Vegetable("Tomato", 80, 90, "summer", "Vitamin C"),
-        Vegetable("Carrot", 15, 60, "winter", "Vitamin A")
-    ]
+    flower = Flower("Rose", 25, 30, "red")
+    flower.creation_log()
+
+    tree = Tree("Oak", 500, 1825, 50)
+    tree.show_type()
+
+    vegetable = Vegetable("Tomato", 80, 90, "summer", "Vitamin C")
+    vegetable.show_type()
 
     for i in range(len(garden)):
         plant = garden[i]
-        plant.display()
+        plant.show()
 
         if plant.type_name == "Flower":
             plant.bloom()
         elif plant.type_name == "Tree":
             plant.produce_shade()
         elif plant.type_name == "Vegetable":
-            plant.nutrition_value()
+            plant.nutritional_valuetion_value()
