@@ -1,0 +1,15 @@
+=== Garden statistics ===
+=== Check year-old
+Is 30 days more than a year? -> False
+Is 400 days more than a year? -> True
+
+=== Flower
+Rose: 15.0cm, 10 days old
+ Color: red
+ Rose has not bloomed yet
+[statistics for Rose]
+Stats: 0 grow, 0 age, 1 show
+[asking the Rose to grow and bloom]
+Rose: 17.1cm, 10 days old
+ Color: red
+ Rose is blooming beautifully!

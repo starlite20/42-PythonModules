@@ -156,4 +156,4 @@ if __name__ == "__main__":
     print(f"[asking the {flower.name} to grow and bloom]")
     flower.grow()
     flower.bloom()
-    flower.current_state()
+    flower.show()
