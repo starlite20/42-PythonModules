@@ -4,7 +4,7 @@
 # CONFIGURATION
 # ==========================================
 CODE_DIR="code"
-EXPECTED_DIR="expected_output"
+DIRECTORY_EXPECTED_OUTPUT="expected_output"
 
 # ANSI Color Codes
 RED='\033[0;31m'
@@ -43,8 +43,8 @@ if [ ! -d "$CODE_DIR" ]; then
     exit 1
 fi
 
-if [ ! -d "$EXPECTED_DIR" ]; then
-    echo -e "${RED}Error: Directory '$EXPECTED_DIR' not found.${NC}"
+if [ ! -d "$DIRECTORY_EXPECTED_OUTPUT" ]; then
+    echo -e "${RED}Error: Directory '$DIRECTORY_EXPECTED_OUTPUT' not found.${NC}"
     exit 1
 fi
 
@@ -65,19 +65,19 @@ for dir in "$CODE_DIR"/*/ ; do
     if [ -d "$dir" ]; then
         ((TOTAL_COUNT++))
         
-        ex_name=$(basename "$dir")
+        name_of_exercise=$(basename "$dir")
         
         # Find the single Python file
         py_file=$(find "$dir" -maxdepth 1 -type f -name "*.py" | head -n 1)
 
         if [ -z "$py_file" ]; then
-            echo -e "${YELLOW}[SKIP]${NC} No Python file found in: $ex_name"
+            echo -e "${YELLOW}[SKIP]${NC} No Python file found in: $name_of_exercise"
             ((SKIP_COUNT++))
             continue
         fi
 
         echo -e "\n${BOLD}========================================${NC}"
-        echo -e "Processing: ${CYAN}$ex_name${NC} ($(basename "$py_file"))"
+        echo -e "Processing: ${CYAN}$name_of_exercise${NC} ($(basename "$py_file"))"
         echo -e "${BOLD}========================================${NC}"
 
         # ------------------------------------------
@@ -102,7 +102,7 @@ for dir in "$CODE_DIR"/*/ ; do
         # 2. EXECUTION & OUTPUT COMPARISON
         # ------------------------------------------
         output_file="${dir}output.txt"
-        expected_file="$EXPECTED_DIR/${ex_name}_eo.txt"
+        file_expected="$DIRECTORY_EXPECTED_OUTPUT/${name_of_exercise}_eo.txt"
         input_file="${dir}input.txt"
 
         # Run Python
@@ -113,20 +113,20 @@ for dir in "$CODE_DIR"/*/ ; do
         fi
 
         # Compare
-        if [ ! -f "$expected_file" ]; then
-            echo -e "${YELLOW}[MISSING]${NC} Expected output file not found: $expected_file"
+        if [ ! -f "$file_expected" ]; then
+            echo -e "${YELLOW}[MISSING]${NC} Expected output file not found: $file_expected"
             ((SKIP_COUNT++))
         else
-            if cmp -s "$output_file" "$expected_file"; then
+            if cmp -s "$output_file" "$file_expected"; then
                 echo -e "${GREEN}[SUCCESS]${NC} Output matches expected result."
                 ((PASS_COUNT++))
             else
                 echo -e "${RED}[FAILED]${NC} Differences detected:"
                 
                 if [[ "$DIFF_CMD" == *"git"* ]]; then
-                    $DIFF_CMD "$expected_file" "$output_file" | cat
+                    $DIFF_CMD "$file_expected" "$output_file" | cat
                 else
-                    $DIFF_CMD "$expected_file" "$output_file" | sed \
+                    $DIFF_CMD "$file_expected" "$output_file" | sed \
                         -e "s/^\-\-.*/${CYAN}\0${NC}/" \
                         -e "s/^++.*/${CYAN}\0${NC}/" \
                         -e "s/^@@.*/${CYAN}\0${NC}/" \
@@ -136,6 +136,12 @@ for dir in "$CODE_DIR"/*/ ; do
                 ((FAIL_COUNT++))
             fi
         fi
+
+        # ------------------------------------------
+        # 3. CLEANUP
+        # ------------------------------------------
+        # Remove the generated output file to keep directory clean
+        rm -f "$output_file"
     fi
 done
 
@@ -150,7 +156,6 @@ echo -e "Passed (Output):   ${GREEN}${PASS_COUNT}${NC}"
 echo -e "Failed (Output):   ${RED}${FAIL_COUNT}${NC}"
 echo -e "Skipped:           ${YELLOW}${SKIP_COUNT}${NC}"
 
-# Display Lint Summary only if flake8 was used
 if [ "$FLAKE8_EXISTS" = true ]; then
     if [ "$LINT_FAIL_COUNT" -gt 0 ]; then
         echo -e "Lint Issues:       ${YELLOW}${LINT_FAIL_COUNT}${NC} (files with style errors)"
