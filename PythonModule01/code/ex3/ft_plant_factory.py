@@ -19,8 +19,13 @@ class Plant:
 
 
 if __name__ == "__main__":
-    garden_data = [("Rose", 25.0, 30), ("Oak", 200.0, 365), ("Cactus", 5.0, 90),
-                   ("Sunflower", 80.0, 45), ("Fern", 15.0, 120)]
+    garden_data = [
+        ("Rose", 25.0, 30),
+        ("Oak", 200.0, 365),
+        ("Cactus", 5.0, 90),
+        ("Sunflower", 80.0, 45),
+        ("Fern", 15.0, 120)
+        ]
     plants = []
 
     print("=== Plant Factory Output ===")

@@ -9,7 +9,7 @@ Rose: 15.0cm, 10 days old
  Rose has not bloomed yet
 [statistics for Rose]
 Stats: 0 grow, 0 age, 1 show
-[asking the Rose to grow and bloom]
+[asking the rose to grow and bloom]
 Rose: 23.0cm, 10 days old
  Color: red
  Rose is blooming beautifully!
@@ -22,7 +22,7 @@ Oak: 200.0cm, 365 days old
 [statistics for Oak]
 Stats: 0 grow, 0 age, 1 show
  0 shade
-[asking the Oak to produce shade]
+[asking the oak to produce shade]
 Tree Oak now produces a shade of 200.0cm long and 5.0cm wide.
 [statistics for Oak]
 Stats: 0 grow, 0 age, 1 show
@@ -33,7 +33,7 @@ Sunflower: 80.0cm, 45 days old
  Color: yellow
  Sunflower has not bloomed yet
  Seeds: 0
-[make Sunflower grow, age and bloom]
+[make sunflower grow, age and bloom]
 Sunflower: 110.0cm, 65 days old
  Color: yellow
  Sunflower is blooming beautifully!

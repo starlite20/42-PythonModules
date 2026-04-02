@@ -1,5 +1,6 @@
 class Plant:
-    def __init__(self, name: str, height: float = 0.0, age_of_plant: int = 0) -> None:
+    def __init__(self, name: str, height: float = 0.0,
+                 age_of_plant: int = 0) -> None:
         self.name = name
         self._height = height if height >= 0 else 0.0
         self._age_of_plant = age_of_plant if age_of_plant >= 0 else 0
@@ -14,19 +15,21 @@ class Plant:
         self._age_of_plant += 1
 
     def creation_log(self) -> None:
-        print("Created: ", end="")
+        print("Plant created: ", end="")
         self.show()
 
     def set_height(self, height_passed) -> None:
         if (height_passed < 0):
-            print("Error, height can't be negative\nHeight update rejected")
+            print(f"{self.name}: Error, height can't be negative")
+            print("Height update rejected")
         else:
             self._height = height_passed
-            print(f"Height updated: {round(self._height, 1)}cm")
+            print(f"Height updated: {round(self._height)}cm")
 
     def set_age(self, age_passed) -> None:
         if (age_passed < 0):
-            print("Error, age can't be negative\nAge update rejected")
+            print(f"{self.name}: Error, age can't be negative")
+            print("Age update rejected")
         else:
             self._age_of_plant = age_passed
             print(f"Age updated: {self._age_of_plant} days")
