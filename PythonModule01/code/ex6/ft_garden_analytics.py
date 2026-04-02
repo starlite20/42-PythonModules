@@ -1,9 +1,9 @@
 class Plant:
-    def __init__(self, name: str, height: float = 0.0, age_of_plant: int = 0) -> None:
+    def __init__(self, name: str = "Unknown plant", height: float = 0.0, age_of_plant: int = 0) -> None:
         self.name = name
         self._height = height if height >= 0 else 0.0
         self._age_of_plant = age_of_plant if age_of_plant >= 0 else 0
-        self.type_name = "Plant"
+        self.type_name = "Anonymous"
         self._number_of_grow_calls = 0
         self._number_of_age_calls = 0
         self._number_of_show_calls = 0
@@ -12,20 +12,23 @@ class Plant:
         self._number_of_show_calls += 1
         print(f"{self.name}: {self._height}cm, {self._age_of_plant} days old")
 
-    def grow(self) -> None:
+    def grow(self, growth_rate: float = 8.0) -> None:
         self._number_of_grow_calls += 1
-        self._height = round(self._height + 2.1, 2)
+        self._height = round(self._height + growth_rate, 2)
 
-    def age(self) -> None:
+    def age(self, age_rate: int = 1) -> None:
         self._number_of_age_calls += 1
-        self._age_of_plant += 1
+        self._age_of_plant += age_rate
 
     def show_type(self) -> None:
         print(f"=== {self.type_name}")
 
     def show_statistics(self) -> None:
         print(
-            f"Stats: {self._number_of_grow_calls} grow, {self._number_of_age_calls} age, {self._number_of_show_calls} show")
+            f"Stats: {self._number_of_grow_calls} grow,"
+            f" {self._number_of_age_calls} age,"
+            f" {self._number_of_show_calls} show"
+        )
 
     def creation_log(self) -> None:
         self.show_type()
@@ -94,13 +97,16 @@ class Tree(Plant):
 
     def produce_shade(self) -> None:
         self.number_of_produced_shades += 1
-        print(f"[asking the {self.name} to produce shade]")
         print(f"Tree {self.name} now produces a shade of {self.get_height()}cm"
-              " long and {self.trunk_diameter}cm wide.")
+              f" long and {self.trunk_diameter}cm wide.")
 
     def show(self) -> None:
         super().show()
         print(f" Trunk diameter: {self.trunk_diameter}cm")
+
+    def show_statistics(self):
+        super().show_statistics()
+        print(f" {self.number_of_produced_shades} shade")
 
 
 class Vegetable(Plant):
@@ -110,8 +116,8 @@ class Vegetable(Plant):
         self.nutritional_value = nutritional_value
         self.update_plant_type("Vegetable")
 
-    def grow(self) -> None:
-        super().grow()
+    def grow(self, growth_rate: float = 8.0) -> None:
+        super().grow(growth_rate)
         self.nutritional_value += 1
 
     def grow_and_age(self, age_for: int) -> None:
@@ -125,18 +131,20 @@ class Vegetable(Plant):
         print(f" Harvest season: {self.harvest_season}")
         print(f" Nutritional value: {self.nutritional_value}")
 
-        # [make tomato grow and age for 20 days]
-
 
 class Seed(Flower):
     def __init__(self, name: str, height: float, age: int, color: str) -> None:
         super().__init__(name, height, age, color)
         self.update_plant_type("Seed")
-        self.number_of_seeds = 0
+        self._number_of_seeds = 0
 
     def show(self) -> None:
         super().show()
-        print(f" : {self.number_of_seeds} seeds")
+        print(f" Seeds: {self._number_of_seeds}")
+
+    def grow(self, growth_rate: float = 8.0) -> None:
+        self._number_of_seeds += int(growth_rate * 1.4)
+        super().grow(growth_rate)
 
 
 if __name__ == "__main__":
@@ -157,3 +165,32 @@ if __name__ == "__main__":
     flower.grow()
     flower.bloom()
     flower.show()
+    print(f"[statistics for {flower.name}]")
+    flower.show_statistics()
+
+    print("\n", end="")
+    tree = Tree("Oak", 200.0, 365, 5.0)
+    tree.creation_log()
+    print(f"[statistics for {tree.name}]")
+    tree.show_statistics()
+    print(f"[asking the {tree.name} to produce shade]")
+    tree.produce_shade()
+    print(f"[statistics for {tree.name}]")
+    tree.show_statistics()
+
+    print("\n", end="")
+    seed = Seed("Sunflower", 80.0, 45, "yellow")
+    seed.creation_log()
+    print(f"[make {seed.name} grow, age and bloom]")
+    seed.bloom()
+    seed.grow(30)
+    seed.age(20)
+    seed.show()
+    print(f"[statistics for {seed.name}]")
+    seed.show_statistics()
+    
+    print("\n", end="")
+    unknown = Plant()
+    unknown.creation_log()
+    print(f"[statistics for {unknown.name}]")
+    unknown.show_statistics()
