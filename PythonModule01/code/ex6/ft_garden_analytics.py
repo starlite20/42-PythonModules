@@ -1,25 +1,47 @@
 class Plant:
+    class InternalStats:
+        def __init__(self) -> None:
+            self._grow_calls = 0
+            self._age_calls = 0
+            self._show_calls = 0
+
+        def increment_grow_calls(self) -> None:
+            self._grow_calls += 1
+
+        def increment_age_calls(self) -> None:
+            self._age_calls += 1
+
+        def increment_show_calls(self) -> None:
+            self._show_calls += 1
+
+        def get_grow_calls_count(self) -> int:
+            return self._grow_calls
+
+        def get_age_calls_count(self) -> int:
+            return self._age_calls
+
+        def get_show_calls_count(self) -> int:
+            return self._show_calls
+
     def __init__(self, name: str = "Unknown plant", height: float = 0.0,
                  age_of_plant: int = 0) -> None:
         self.name = name
         self._height = height if height >= 0 else 0.0
         self._age_of_plant = age_of_plant if age_of_plant >= 0 else 0
         self.type_name = "Anonymous"
-        self._number_of_grow_calls = 0
-        self._number_of_age_calls = 0
-        self._number_of_show_calls = 0
+        self.stats = self.InternalStats()
 
     def show(self) -> None:
-        self._number_of_show_calls += 1
+        self.stats.increment_show_calls()
         print(f"{self.name.capitalize()}: "
               f"{self._height}cm, {self._age_of_plant} days old")
 
     def grow(self, growth_rate: float = 8.0) -> None:
-        self._number_of_grow_calls += 1
+        self.stats.increment_grow_calls()
         self._height = round(self._height + growth_rate, 2)
 
     def age(self, age_rate: int = 1) -> None:
-        self._number_of_age_calls += 1
+        self.stats.increment_age_calls()
         self._age_of_plant += age_rate
 
     def show_type(self) -> None:
@@ -27,9 +49,9 @@ class Plant:
 
     def show_statistics(self) -> None:
         print(
-            f"Stats: {self._number_of_grow_calls} grow,"
-            f" {self._number_of_age_calls} age,"
-            f" {self._number_of_show_calls} show"
+            f"Stats: {self.stats.get_grow_calls_count()} grow,"
+            f" {self.stats.get_age_calls_count()} age,"
+            f" {self.stats.get_show_calls_count()} show"
         )
 
     def creation_log(self) -> None:
@@ -66,6 +88,10 @@ class Plant:
     @staticmethod
     def older_than_a_year(age_value) -> bool:
         return age_value > 365
+
+    @classmethod
+    def create_anonymous(cls):
+        return cls("Unknown plant", 0.0, 0)
 
 
 class Flower(Plant):
@@ -110,7 +136,7 @@ class Tree(Plant):
         super().show()
         print(f" Trunk diameter: {self.trunk_diameter}cm")
 
-    def show_statistics(self):
+    def show_statistics(self) -> None:
         super().show_statistics()
         print(f" {self.number_of_produced_shades} shade")
 
@@ -143,15 +169,23 @@ class Seed(Flower):
     def __init__(self, name: str, height: float, age: int, color: str) -> None:
         super().__init__(name, height, age, color)
         self.update_plant_type("Seed")
-        self._number_of_seeds = 0
+        self.number_of_seeds = 0
 
     def show(self) -> None:
         super().show()
-        print(f" Seeds: {self._number_of_seeds}")
+        print(f" Seeds: {self.number_of_seeds}")
 
     def grow(self, growth_rate: float = 8.0) -> None:
-        self._number_of_seeds += int(growth_rate * 1.4)
         super().grow(growth_rate)
+
+    def bloom(self, number_of_seeds: int = 0) -> None:
+        super().bloom()
+        self.number_of_seeds += number_of_seeds
+
+
+def show_plant_statistics(plant_obj: Plant) -> None:
+    print(f"[statistics for {plant_obj.name.capitalize()}]")
+    plant_obj.show_statistics()
 
 
 if __name__ == "__main__":
@@ -168,38 +202,32 @@ if __name__ == "__main__":
     print("\n", end="")
     flower = Flower("rose", 15.0, 10, "red")
     flower.creation_log()
-    print(f"[statistics for {flower.name.capitalize()}]")
-    flower.show_statistics()
+    show_plant_statistics(flower)
     print(f"[asking the {flower.name} to grow and bloom]")
     flower.grow()
     flower.bloom()
     flower.show()
-    print(f"[statistics for {flower.name.capitalize()}]")
-    flower.show_statistics()
+    show_plant_statistics(flower)
 
     print("\n", end="")
     tree = Tree("oak", 200.0, 365, 5.0)
     tree.creation_log()
-    print(f"[statistics for {tree.name.capitalize()}]")
-    tree.show_statistics()
+    show_plant_statistics(tree)
     print(f"[asking the {tree.name} to produce shade]")
     tree.produce_shade()
-    print(f"[statistics for {tree.name.capitalize()}]")
-    tree.show_statistics()
+    show_plant_statistics(tree)
 
     print("\n", end="")
     seed = Seed("sunflower", 80.0, 45, "yellow")
     seed.creation_log()
     print(f"[make {seed.name} grow, age and bloom]")
-    seed.bloom()
+    seed.bloom(42)
     seed.grow(30)
     seed.age(20)
     seed.show()
-    print(f"[statistics for {seed.name.capitalize()}]")
-    seed.show_statistics()
+    show_plant_statistics(seed)
 
     print("\n", end="")
-    unknown = Plant()
+    unknown = Plant.create_anonymous()
     unknown.creation_log()
-    print(f"[statistics for {unknown.name}]")
-    unknown.show_statistics()
+    show_plant_statistics(unknown)
