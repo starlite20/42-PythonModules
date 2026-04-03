@@ -16,5 +16,5 @@ if __name__ == "__main__":
     ]
 
     print("=== Garden Plant Registry ===")
-    for i in range(len(garden)):
-        garden[i].show()
+    for plant in garden:
+        plant.show()

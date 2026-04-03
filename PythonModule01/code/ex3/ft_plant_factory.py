@@ -7,8 +7,8 @@ class Plant:
     def show(self) -> None:
         print(f"{self.name}: {self.height}cm, {self.age_of_plant} days old")
 
-    def grow(self) -> None:
-        self.height = round(self.height + 0.8, 2)
+    def grow(self, growth_rate: float = 0.8) -> None:
+        self.height = round(self.height + growth_rate, 2)
 
     def age(self) -> None:
         self.age_of_plant += 1
@@ -25,7 +25,7 @@ if __name__ == "__main__":
         ("Cactus", 5.0, 90),
         ("Sunflower", 80.0, 45),
         ("Fern", 15.0, 120)
-        ]
+    ]
     plants = []
 
     print("=== Plant Factory Output ===")
@@ -34,3 +34,4 @@ if __name__ == "__main__":
         plant = Plant(*data)
         plant.creation_log()
         plant.grow()
+        plants += [plant]

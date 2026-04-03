@@ -12,8 +12,8 @@ class Plant:
             f"{self._height}cm, {self._age_of_plant} days old"
             )
 
-    def grow(self) -> None:
-        self._height = round(self._height + 2.1, 2)
+    def grow(self, growth_rate: float = 2.1) -> None:
+        self._height = round(self._height + growth_rate, 2)
 
     def age(self) -> None:
         self._age_of_plant += 1
@@ -102,8 +102,8 @@ class Vegetable(Plant):
         self.nutritional_value = nutritional_value
         self.update_plant_type("Vegetable")
 
-    def grow(self) -> None:
-        super().grow()
+    def grow(self, growth_rate: float = 2.1) -> None:
+        super().grow(growth_rate)
         self.nutritional_value += 1
 
     def grow_and_age(self, age_for: int) -> None:

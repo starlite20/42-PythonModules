@@ -21,6 +21,7 @@ PASS_COUNT=0
 FAIL_COUNT=0
 SKIP_COUNT=0
 LINT_FAIL_COUNT=0
+TYPE_FAIL_COUNT=0
 
 # Determine Diff Command
 if command -v git &> /dev/null; then
@@ -33,6 +34,10 @@ fi
 FLAKE8_EXISTS=false
 if command -v flake8 &> /dev/null; then
     FLAKE8_EXISTS=true
+fi
+MYPY_EXISTS=false
+if command -v mypy &> /dev/null; then
+    MYPY_EXISTS=true
 fi
 
 # ==========================================
@@ -95,6 +100,25 @@ for dir in "$CODE_DIR"/*/ ; do
                 echo -e "${YELLOW}[LINT WARN]${NC} Style issues detected:"
                 echo "$LINT_OUTPUT"
                 ((LINT_FAIL_COUNT++))
+            fi
+        fi
+        
+        # ------------------------------------------
+        # 1.1 TYPE CHECK (mypy)
+        # ------------------------------------------
+        if [ "$MYPY_EXISTS" = true ]; then
+            echo -e "${BLUE}[TYPE]${NC} Checking types with mypy..."
+            
+            # --ignore-missing-imports helps if you use libraries without stubs
+            # --follow-imports=silent keeps the output focused on the file at hand
+            TYPE_OUTPUT=$(mypy "$py_file" --ignore-missing-imports --follow-imports=silent 2>&1 | grep "error:")
+            
+            if [ -z "$TYPE_OUTPUT" ]; then
+                echo -e "${GREEN}[TYPE OK]${NC} No type issues found."
+            else
+                echo -e "${RED}[TYPE FAIL]${NC} Type inconsistencies detected:"
+                echo "$TYPE_OUTPUT"
+                ((TYPE_FAIL_COUNT++))
             fi
         fi
 
@@ -164,10 +188,18 @@ if [ "$FLAKE8_EXISTS" = true ]; then
     fi
 fi
 
+if [ "$MYPY_EXISTS" = true ]; then
+    if [ "$TYPE_FAIL_COUNT" -gt 0 ]; then
+        echo -e "Type Issues:       ${RED}${TYPE_FAIL_COUNT}${NC} (files with type errors)"
+    else
+        echo -e "Type Issues:       ${GREEN}0 (All types sound!)${NC}"
+    fi
+fi
+
 echo -e "${BOLD}========================================${NC}"
 
 # Final status logic
-if [ "$FAIL_COUNT" -gt 0 ]; then
+if [ "$FAIL_COUNT" -gt 0 ] || [ "$TYPE_FAIL_COUNT" -gt 0 ]; then
     echo -e "${RED}Status: TESTS FAILED${NC}"
     exit 1
 elif [ "$LINT_FAIL_COUNT" -gt 0 ]; then
