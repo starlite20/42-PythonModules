@@ -1,11 +1,11 @@
-def input_temperature(input_str: str) -> int:
-    print(f"\nInput data is '{input_str}'")
-    return int(input_str)
+def input_temperature(temp_str: str) -> int:
+    print(f"\nInput data is '{temp_str}'")
+    return int(temp_str)
 
 
-def call_input_temperature(input_str: str) -> None:
+def call_input_temperature(temp_str: str) -> None:
     try:
-        temp = input_temperature(input_str)
+        temp = input_temperature(temp_str)
         print(f"Temperature is now {temp}°C")
     except ValueError as e:
         print(f"Caught input_temperature error: {e}")
