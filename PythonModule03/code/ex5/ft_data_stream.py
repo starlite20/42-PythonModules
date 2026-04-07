@@ -1,6 +1,7 @@
 import random
 from typing import Generator
 
+
 def gen_event() -> Generator[tuple[str, str], None, None]:
     players = ["bob", "alice", "charlie", "dylan"]
     actions = ["run", "eat", "sleep", "grab", "climb", "release", "swim"]

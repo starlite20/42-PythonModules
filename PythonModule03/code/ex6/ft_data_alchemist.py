@@ -4,7 +4,8 @@ import random
 def main():
     print("=== Game Data Alchemist ===")
 
-    players = ['Alice', 'bob', 'Charlie', 'dylan', 'Emma', 'Gregory', 'john', 'kevin', 'Liam']
+    players = ['Alice', 'bob', 'Charlie', 'dylan',
+               'Emma', 'Gregory', 'john', 'kevin', 'Liam']
     print(f"Initial list of players: {players}")
 
     # all names capitalized
@@ -12,7 +13,7 @@ def main():
     print(f"New list with all names capitalized: {capitalized}")
 
     # only already-capitalized names
-    capitalized_only = [name for name in players if name==name.capitalize()]
+    capitalized_only = [name for name in players if name == name.capitalize()]
     print(f"New list of capitalized names only: {capitalized_only}")
 
     # dict with random scores
@@ -24,7 +25,8 @@ def main():
     print(f"Score average is {avg}")
 
     # high scores dict
-    high_scores = {name: score for name, score in scores.items() if score > avg}
+    high_scores = {name: score for name,
+                   score in scores.items() if score > avg}
     print(f"High scores: {high_scores}")
 
 

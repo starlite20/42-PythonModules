@@ -52,8 +52,14 @@ def main():
         if least_item is None or inventory[item] < inventory[least_item]:
             least_item = item
 
-    print(f"Item most abundant: {most_item} with quantity {inventory[most_item]}")
-    print(f"Item least abundant: {least_item} with quantity {inventory[least_item]}")
+    print(
+        f"Item most abundant: {most_item}"
+        f" with quantity {inventory[most_item]}"
+        )
+    print(
+        f"Item least abundant: {least_item}"
+        f" with quantity {inventory[least_item]}"
+        )
 
     inventory.update({"magic_item": 1})
     print(f"Updated inventory: {inventory}")

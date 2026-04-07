@@ -1,5 +1,6 @@
 import random
 
+
 def gen_player_achievements():
     achievement_pool = [
         "First Steps",
@@ -20,6 +21,7 @@ def gen_player_achievements():
     count = random.randint(5, 9)
     achievement_set = set(random.sample(achievement_pool, count))
     return achievement_set
+
 
 def main():
     players = {
@@ -49,7 +51,7 @@ def main():
         players["Dylan"]
     )
     print(f"\nCommon achievements:{common_achievements}\n")
-    
+
     alice_only = players["Alice"].difference(
         set.union(players["Bob"], players["Charlie"], players["Dylan"])
     )
@@ -70,7 +72,8 @@ def main():
 
     print("\nAlice is missing:", all_achievements.difference(players["Alice"]))
     print("Bob is missing:", all_achievements.difference(players["Bob"]))
-    print("Charlie is missing:", all_achievements.difference(players["Charlie"]))
+    print("Charlie is missing:",
+          all_achievements.difference(players["Charlie"]))
     print("Dylan is missing:", all_achievements.difference(players["Dylan"]))
 
 

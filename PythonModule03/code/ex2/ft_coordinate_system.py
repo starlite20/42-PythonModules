@@ -1,14 +1,16 @@
 import math
 
+
 def get_player_pos():
     while True:
-        user_input = input("Enter new coordinates as floats in format 'x,y,z': ")
+        user_input = input(
+            "Enter new coordinates as floats in format 'x,y,z': ")
         coordinates = user_input.split(',')
 
         if len(coordinates) != 3:
             print("Invalid syntax")
             continue
-        
+
         try:
             x = float(coordinates[0].strip())
             y = float(coordinates[1].strip())
@@ -49,7 +51,8 @@ def main():
     point_2 = get_player_pos()
 
     dist_between = distance(point_1, point_2)
-    print("Distance between the 2 sets of coordinates:", round(dist_between, 4))
+    print("Distance between the 2 sets of coordinates:",
+          round(dist_between, 4))
 
 
 if __name__ == "__main__":
