@@ -1,0 +1,16 @@
+$> python3 ft_inventory_system.py sword:1 potion:5 shield:2 armor:3 helmet:1 sword:2 hello key:value
+=== Inventory System Analysis ===
+Redundant item 'sword' - discarding
+Error - invalid parameter 'hello'
+Quantity error for 'key': invalid literal for int() with base 10: 'value'
+Got inventory: {'sword': 1, 'potion': 5, 'shield': 2, 'armor': 3, 'helmet': 1}
+Item list: ['sword', 'potion', 'shield', 'armor', 'helmet']
+Total quantity of the 5 items: 12
+Item sword represents 8.3%
+Item potion represents 41.7%
+Item shield represents 16.7%
+Item armor represents 25.0%
+Item helmet represents 8.3%
+Item most abundant: potion with quantity 5
+Item least abundant: sword with quantity 1
+Updated inventory: {'sword': 1, 'potion': 5, 'shield': 2, 'armor': 3, 'helmet': 1, 'magic_item': 1}

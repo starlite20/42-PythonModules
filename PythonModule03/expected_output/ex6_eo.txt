@@ -1,0 +1,10 @@
+$> python3 ft_data_alchemist.py
+=== Game Data Alchemist ===
+
+Initial list of players: ['Alice', 'bob', 'Charlie', 'dylan', 'Emma', 'Gregory', 'john', 'kevin', 'Liam']
+New list with all names capitalized: ['Alice', 'Bob', 'Charlie', 'Dylan', 'Emma', 'Gregory', 'John', 'Kevin', 'Liam']
+New list of capitalized names only: ['Alice', 'Charlie', 'Emma', 'Gregory', 'Liam']
+
+Score dict: {'Alice': 263, 'Bob': 666, 'Charlie': 907, 'Dylan': 170, 'Emma': 568, 'Gregory': 446, 'John': 90, 'Kevin': 527, 'Liam': 54}
+Score average is 410.11
+High scores: {'Bob': 666, 'Charlie': 907, 'Emma': 568, 'Gregory': 446, 'Kevin': 527}
