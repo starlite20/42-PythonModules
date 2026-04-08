@@ -1,7 +1,7 @@
 import sys
 
 
-def main():
+def main() -> None:
     print("=== Inventory System Analysis ===")
 
     inventory = {}

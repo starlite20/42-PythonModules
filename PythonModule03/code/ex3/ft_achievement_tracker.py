@@ -1,7 +1,7 @@
 import random
 
 
-def gen_player_achievements():
+def gen_player_achievements() -> set[str]:
     achievement_pool = [
         "First Steps",
         "Speed Runner",
@@ -23,58 +23,37 @@ def gen_player_achievements():
     return achievement_set
 
 
-def main():
-    players = {
-        "Alice": gen_player_achievements(),
-        "Bob": gen_player_achievements(),
-        "Charlie": gen_player_achievements(),
-        "Dylan": gen_player_achievements()
-    }
+def main() -> None:
+    alice = gen_player_achievements()
+    bob = gen_player_achievements()
+    charlie = gen_player_achievements()
+    dylan = gen_player_achievements()
 
-    print("Player Alice:", players["Alice"])
-    print("Player Bob:", players["Bob"])
-    print("Player Charlie:", players["Charlie"])
-    print("Player Dylan:", players["Dylan"])
+    print(f"Player Alice: {alice}")
+    print(f"Player Bob: {bob}")
+    print(f"Player Charlie: {charlie}")
+    print(f"Player Dylan: {dylan}")
 
-    all_achievements = set.union(
-        players["Alice"],
-        players["Bob"],
-        players["Charlie"],
-        players["Dylan"]
-    )
-    print("All distinct achievements:", all_achievements)
+    all_achievements = set.union(alice, bob, charlie, dylan)
+    print(f"All distinct achievements: {all_achievements}")
 
-    common_achievements = set.intersection(
-        players["Alice"],
-        players["Bob"],
-        players["Charlie"],
-        players["Dylan"]
-    )
-    print(f"\nCommon achievements:{common_achievements}\n")
+    common_achievements = set.intersection(alice, bob, charlie, dylan)
+    print(f"\nCommon achievements: {common_achievements}\n")
 
-    alice_only = players["Alice"].difference(
-        set.union(players["Bob"], players["Charlie"], players["Dylan"])
-    )
-    bob_only = players["Bob"].difference(
-        set.union(players["Alice"], players["Charlie"], players["Dylan"])
-    )
-    charlie_only = players["Charlie"].difference(
-        set.union(players["Alice"], players["Bob"], players["Dylan"])
-    )
-    dylan_only = players["Dylan"].difference(
-        set.union(players["Alice"], players["Bob"], players["Charlie"])
-    )
+    alice_only = alice.difference(set.union(bob, charlie, dylan))
+    bob_only = bob.difference(set.union(alice, charlie, dylan))
+    charlie_only = charlie.difference(set.union(alice, bob, dylan))
+    dylan_only = dylan.difference(set.union(alice, bob, charlie))
 
-    print("Only Alice has:", alice_only)
-    print("Only Bob has:", bob_only)
-    print("Only Charlie has:", charlie_only)
-    print("Only Dylan has:", dylan_only)
+    print(f"Only Alice has: {alice_only}")
+    print(f"Only Bob has: {bob_only}")
+    print(f"Only Charlie has: {charlie_only}")
+    print(f"Only Dylan has: {dylan_only}")
 
-    print("\nAlice is missing:", all_achievements.difference(players["Alice"]))
-    print("Bob is missing:", all_achievements.difference(players["Bob"]))
-    print("Charlie is missing:",
-          all_achievements.difference(players["Charlie"]))
-    print("Dylan is missing:", all_achievements.difference(players["Dylan"]))
+    print(f"\nAlice is missing: {all_achievements.difference(alice)}")
+    print(f"Bob is missing: {all_achievements.difference(bob)}")
+    print(f"Charlie is missing: {all_achievements.difference(charlie)}")
+    print(f"Dylan is missing: {all_achievements.difference(dylan)}")
 
 
 if __name__ == "__main__":

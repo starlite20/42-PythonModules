@@ -7,27 +7,26 @@ def gen_event() -> Generator[tuple[str, str], None, None]:
     actions = ["run", "eat", "sleep", "grab", "climb", "release", "swim"]
 
     while True:
-        yield (players[random.randint(0, len(players) - 1)],
-               actions[random.randint(0, len(actions) - 1)])
+        yield (random.choice(players), random.choice(actions))
 
 
-def consume_event(events):
+def consume_event(
+        events: list[tuple[str, str]]
+) -> Generator[tuple[str, str], None, None]:
     while len(events) > 0:
         index = random.randint(0, len(events) - 1)
         yield events.pop(index)
 
 
-def main():
+def main() -> None:
     print("=== Game Data Stream Processor ===")
 
     generator = gen_event()
 
-    # 1000 events
     for i in range(1000):
         event = next(generator)
         print(f"Event {i}: Player {event[0]} did action {event[1]}")
 
-    # build list of 10 events
     generator = gen_event()
     event_list = []
 
@@ -36,7 +35,6 @@ def main():
 
     print(f"Built list of 10 events: {event_list}")
 
-    # consume events
     for event in consume_event(event_list):
         print(f"Got event from list: {event}")
         print(f"Remains in list: {event_list}")
