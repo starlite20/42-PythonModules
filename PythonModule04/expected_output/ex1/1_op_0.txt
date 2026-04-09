@@ -1,0 +1,21 @@
+=== Cyber Archives Recovery & Preservation ===
+Accessing file 'ancient_fragment.txt'
+---
+
+[FRAGMENT 001] Digital preservation protocols established 2087
+[FRAGMENT 002] Knowledge must survive the entropy wars
+[FRAGMENT 003] Every byte saved is a victory against oblivion
+
+---
+File 'ancient_fragment.txt' closed.
+
+Transform data:
+---
+
+[FRAGMENT 001] Digital preservation protocols established 2087#
+[FRAGMENT 002] Knowledge must survive the entropy wars#
+[FRAGMENT 003] Every byte saved is a victory against oblivion#
+
+---
+Enter new file name (or empty):
+Not saving data.

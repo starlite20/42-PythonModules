@@ -1,0 +1,1 @@
+$> python3 ft_ancient_text.py /etc/master.passwd

@@ -1,0 +1,36 @@
+import typing
+
+def secure_archive(filename, action="read", content="") -> typing.Tuple(bool, str):
+    try:
+        if action == "read":
+            with open(filename, "r") as file:
+                return (True, file.read())
+        if action == "write":
+            with open(filename, "w") as file:
+                file.write(content)
+                return (True, "Content successfully written to file")
+        return (False, "Invalid action")
+    except Exception as e:
+        return (False, str(e))
+
+
+def main():
+    print("=== Cyber Archives Security ===")
+
+    print("Using 'secure_archive' to read from a nonexistent file:")
+    print(secure_archive("/not/existing/file"))
+
+    print("\nUsing 'secure_archive' to read from an inaccessible file:")
+    print(secure_archive("/etc/master.passwd"))
+
+    print("\nUsing 'secure_archive' to read from a regular file:")
+    result = secure_archive("ancient_fragment.txt")
+    print(result)
+
+    if result[0] is True:
+        print("\nUsing 'secure_archive' to write previous content to a new file:")
+        print(secure_archive("new_fragment.txt", "write", result[1]))
+
+
+if __name__ == "__main__":
+    main()

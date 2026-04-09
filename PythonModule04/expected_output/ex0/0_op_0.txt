@@ -1,0 +1,1 @@
+Usage: ft_ancient_text.py <file>

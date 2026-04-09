@@ -1,0 +1,29 @@
+$> python3 ft_stream_management.py foo
+=== Cyber Archives Recovery & Preservation ===
+Accessing file 'foo'
+[STDERR] Error opening file 'foo': [Errno 2] No such file or directory: 'foo'
+
+$> python3 ft_stream_management.py ancient_fragment.txt
+=== Cyber Archives Recovery & Preservation ===
+Accessing file 'ancient_fragment.txt'
+---
+
+[FRAGMENT 001] Digital preservation protocols established 2087
+[FRAGMENT 002] Knowledge must survive the entropy wars
+[FRAGMENT 003] Every byte saved is a victory against oblivion
+
+---
+File 'ancient_fragment.txt' closed.
+
+Transform data:
+---
+
+[FRAGMENT 001] Digital preservation protocols established 2087#
+[FRAGMENT 002] Knowledge must survive the entropy wars#
+[FRAGMENT 003] Every byte saved is a victory against oblivion#
+
+---
+Enter new file name (or empty): /etc/passwd
+Saving data to '/etc/passwd'
+[STDERR] Error opening file '/etc/passwd': [Errno 13] Permission denied: '/etc/passwd'
+Data not saved.

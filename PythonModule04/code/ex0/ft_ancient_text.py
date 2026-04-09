@@ -9,7 +9,7 @@ def print_file_data(file: typing.IO[str]) -> None:
     
 def main() -> None: 
     if(len(sys.argv) != 2):
-        print("Usage: ft_ancient_text.py <file>\n")
+        print("Usage: ft_ancient_text.py <file>")
         return
     
     file = None
@@ -21,7 +21,7 @@ def main() -> None:
         print_file_data(file)
         
     except Exception as e:
-        print(f"Error opening file '{filename}': {e}\n")
+        print(f"Error opening file '{filename}': {e}")
         return
     finally:
         if file is not None:
