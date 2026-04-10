@@ -1,5 +1,6 @@
 import typing
 
+
 def secure_archive(filename, action="read", content="") -> typing.Tuple(bool, str):
     try:
         if action == "read":
@@ -14,7 +15,7 @@ def secure_archive(filename, action="read", content="") -> typing.Tuple(bool, st
         return (False, str(e))
 
 
-def main():
+def main() -> None:
     print("=== Cyber Archives Security ===")
 
     print("Using 'secure_archive' to read from a nonexistent file:")
