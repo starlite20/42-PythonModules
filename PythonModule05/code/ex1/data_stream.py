@@ -37,7 +37,8 @@ class NumericProcessor(DataProcessor):
             return True
         if isinstance(data, list):
             for item in data:
-                if isinstance(item, bool) or not isinstance(item, (int, float)):
+                if isinstance(item, bool) or not isinstance(item,
+                                                            (int, float)):
                     return False
             return True
         return False
@@ -125,7 +126,9 @@ class DataStream:
                     handled = True
                     break
             if not handled:
-                print(f"DataStream error - Can't process element in stream: {element}")
+                print(
+                    f"DataStream error - "
+                    f"Can't process element in stream: {element}")
 
     def print_processors_stats(self) -> None:
         print("== DataStream statistics ==")
@@ -135,8 +138,8 @@ class DataStream:
         for proc in self._processors:
             proc_name = type(proc).__name__.replace("Processor", " Processor")
             print(
-                f"{proc_name}: total {proc.total_processed()} items processed, "
-                f"remaining {proc.remaining()} on processor"
+                f"{proc_name}: total {proc.total_processed()}"
+                f" items processed, remaining {proc.remaining()} on processor"
             )
 
 
@@ -183,7 +186,10 @@ def main() -> None:
     stream.process_stream(batch)
     stream.print_processors_stats()
 
-    print("Consume some elements from the data processors: Numeric 3, Text 2, Log 1")
+    print(
+        "Consume some elements from the "
+        "data processors: Numeric 3, Text 2, Log 1"
+    )
     for _ in range(3):
         numeric.output()
     for _ in range(2):
@@ -191,6 +197,7 @@ def main() -> None:
     for _ in range(1):
         log.output()
     stream.print_processors_stats()
+
 
 if __name__ == "__main__":
     main()
