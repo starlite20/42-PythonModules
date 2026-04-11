@@ -3,7 +3,7 @@ import sys
 
 def print_content(content: str) -> None:
     print("---\n")
-    print(content)
+    print(content, end="")
     print("\n---")
 
 
@@ -31,7 +31,6 @@ def add_artifact_to_content(content: str) -> str:
         if (character == "\n"):
             archived_content += "#"
         archived_content += character
-    archived_content += "#"
 
     return archived_content
 
@@ -41,7 +40,7 @@ def write_archived_content(write_filename: str, content: str) -> None:
     try:
         print(f"Saving data to '{write_filename}'")
         writefile = open(write_filename, "w")
-        writefile.write(content + '\n')
+        writefile.write(content)
         print(f"Data saved in file '{write_filename}'.")
 
     except Exception as e:

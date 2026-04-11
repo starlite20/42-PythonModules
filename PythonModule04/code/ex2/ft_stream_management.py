@@ -3,7 +3,7 @@ import sys
 
 def print_content(content: str) -> None:
     print("---\n")
-    print(content)
+    print(content, end="")
     print("\n---")
 
 
@@ -40,7 +40,7 @@ def write_archived_content(write_filename: str, content: str) -> None:
     try:
         print(f"Saving data to '{write_filename}'")
         writefile = open(write_filename, "w")
-        writefile.write(content + '\n')
+        writefile.write(content)
         print(f"Data saved in file '{write_filename}'.")
     except Exception as e:
         sys.stderr.write(

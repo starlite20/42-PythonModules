@@ -20,6 +20,7 @@ $> python3 ft_ancient_text.py ancient_fragment.txt
 === Cyber Archives Recovery ===
 Accessing file 'ancient_fragment.txt'
 ---
+
 [FRAGMENT 001] Digital preservation protocols established 2087
 [FRAGMENT 002] Knowledge must survive the entropy wars
 [FRAGMENT 003] Every byte saved is a victory against oblivion
