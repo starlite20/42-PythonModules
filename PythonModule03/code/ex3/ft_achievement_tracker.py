@@ -40,10 +40,10 @@ def main() -> None:
     common_achievements = set.intersection(alice, bob, charlie, dylan)
     print(f"\nCommon achievements: {common_achievements}\n")
 
-    alice_only = alice.difference(set.union(bob, charlie, dylan))
-    bob_only = bob.difference(set.union(alice, charlie, dylan))
-    charlie_only = charlie.difference(set.union(alice, bob, dylan))
-    dylan_only = dylan.difference(set.union(alice, bob, charlie))
+    alice_only = alice.difference(bob.union(charlie, dylan))
+    bob_only = bob.difference(alice.union(charlie, dylan))
+    charlie_only = charlie.difference(alice.union(bob, dylan))
+    dylan_only = dylan.difference(alice.union(bob, charlie))
 
     print(f"Only Alice has: {alice_only}")
     print(f"Only Bob has: {bob_only}")
