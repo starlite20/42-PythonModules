@@ -1,5 +1,4 @@
 import sys
-import typing
 
 
 def print_content(content: str) -> None:
@@ -8,7 +7,7 @@ def print_content(content: str) -> None:
     print("\n---")
 
 
-def read_artifact_print_file(filename: str) -> typing.Tuple[str, str]:
+def read_artifact_print_file(filename: str) -> tuple[str, str] | None:
     file = None
     content = ""
     archived_content = ""
@@ -41,7 +40,7 @@ def write_archived_content(write_filename: str, content: str) -> None:
     try:
         print(f"Saving data to '{write_filename}'")
         writefile = open(write_filename, "w")
-        writefile.write(content)
+        writefile.write(content + '\n')
         print(f"Data saved in file '{write_filename}'.")
     except Exception as e:
         sys.stderr.write(

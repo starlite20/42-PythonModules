@@ -1,7 +1,5 @@
-import typing
-
-
-def secure_archive(filename, action="read", content="") -> typing.Tuple(bool, str):
+def secure_archive(filename: str, action: str = "read",
+                   content: str = "") -> tuple[bool, str]:
     try:
         if action == "read":
             with open(filename, "r") as file:
@@ -29,7 +27,8 @@ def main() -> None:
     print(result)
 
     if result[0] is True:
-        print("\nUsing 'secure_archive' to write previous content to a new file:")
+        print("\nUsing 'secure_archive' to write "
+              "previous content to a new file:")
         print(secure_archive("new_fragment.txt", "write", result[1]))
 
 
