@@ -53,7 +53,7 @@ def write_archived_content(write_filename: str, content: str) -> None:
 
 def main() -> None:
     if (len(sys.argv) != 2):
-        print("Usage: ft_ancient_text.py <file>\n")
+        print("Usage: ft_ancient_text.py <file>")
         return
 
     print("=== Cyber Archives Recovery & Preservation ===")
