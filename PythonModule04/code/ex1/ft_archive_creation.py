@@ -3,7 +3,7 @@ import sys
 
 def print_content(content: str) -> None:
     print("---\n")
-    print(content, end="")
+    print(content)
     print("\n---")
 
 
@@ -31,6 +31,8 @@ def add_artifact_to_content(content: str) -> str:
         if (character == "\n"):
             archived_content += "#"
         archived_content += character
+    if not content.endswith('\n'):
+        archived_content += "#"
 
     return archived_content
 
@@ -53,7 +55,7 @@ def write_archived_content(write_filename: str, content: str) -> None:
 
 def main() -> None:
     if (len(sys.argv) != 2):
-        print("Usage: ft_ancient_text.py <file>")
+        print("Usage: ft_archive_creation.py <file>")
         return
 
     print("=== Cyber Archives Recovery & Preservation ===")

@@ -3,7 +3,7 @@ import sys
 
 def print_content(content: str) -> None:
     print("---\n")
-    print(content, end="")
+    print(content)
     print("\n---")
 
 

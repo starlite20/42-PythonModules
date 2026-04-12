@@ -5,7 +5,7 @@ import typing
 def print_file_data(file: typing.IO[str]) -> None:
     content = file.read()
     print("---\n")
-    print(content, end="")
+    print(content)
     print("\n---")
 
 
