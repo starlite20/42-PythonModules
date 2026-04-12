@@ -1,0 +1,33 @@
+
+First, we will create the components of our laboratory architecture (and then the testing
+suite)
+
+elements.py will contain:
+    • A function create_fire() that just returns the string “Fire element created”.
+    • A function create_water() that just returns the string “Water element created”.
+    alchemy/elements.py will contain:
+    • A function create_earth() that just returns the string “Earth element created”.
+    • A function create_air() that just returns the string “Air element created”.
+
+alchemy/__init__.py will contain:
+    • Anything useful to partially import the alchemy module. See ft_alembic_4.py .
+    In order to carefully test our laboratory architecture, create the following six scripts:
+    • ft_alembic_0.py will use the import ... structure to access elements.py directly
+    and then create fire.
+    • ft_alembic_1.py will use the from ... import ... structure to access elements.py
+    directly and then create water.
+    • ft_alembic_2.py will use the import ... structure to access alchemy/elements.py
+    directly and then create earth.
+    
+7
+The Codex Mastering Python’s Import Mysteries
+• ft_alembic_3.py will use the from ... import ... structure to access
+alchemy/elements.py directly and then create air.
+• ft_alembic_4.py will use import alchemy to access the alchemy module and then
+create air. The create_earth() function will not be exposed through the module
+interface and raise an exception when called (you can catch the exception or not, this
+is only for pedagogical purposes). A mypy error will also raise, again, on purpose.
+• ft_alembic_5.py will use the from alchemy import ... structure to access the
+alchemy module and then create air.
+You may face flake8 / mypy errors over your __init__.py file. Follow
+usual conventions in this situation.

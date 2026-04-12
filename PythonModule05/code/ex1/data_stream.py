@@ -4,8 +4,8 @@ import typing
 
 class DataProcessor(ABC):
     def __init__(self) -> None:
-        self._storage: list[str] = []
-        self._processed_count: int = 0
+        self._storage: list[tuple[int, str]] = []
+        self._next_rank: int = 0
 
     @abstractmethod
     def validate(self, data: typing.Any) -> bool:
@@ -16,29 +16,24 @@ class DataProcessor(ABC):
         pass
 
     def output(self) -> tuple[int, str]:
-        if len(self._storage) == 0:
+        if not self._storage:
             raise ValueError("No data available")
-        value = self._storage.pop(0)
-        rank = self._processed_count - len(self._storage) - 1
-        return (rank, value)
+        return self._storage.pop(0)
 
     def remaining(self) -> int:
         return len(self._storage)
 
-    def total_processed(self) -> int:
-        return self._processed_count
+    def get_next_rank(self) -> int:
+        return self._next_rank
 
 
 class NumericProcessor(DataProcessor):
     def validate(self, data: typing.Any) -> bool:
-        if isinstance(data, bool):
-            return False
         if isinstance(data, (int, float)):
             return True
         if isinstance(data, list):
             for item in data:
-                if isinstance(item, bool) or not isinstance(item,
-                                                            (int, float)):
+                if not isinstance(item, (int, float)):
                     return False
             return True
         return False
@@ -48,11 +43,11 @@ class NumericProcessor(DataProcessor):
             raise ValueError("Improper numeric data")
         if isinstance(data, list):
             for item in data:
-                self._storage.append(str(item))
-                self._processed_count += 1
+                self._storage.append((self._next_rank, str(item)))
+                self._next_rank += 1
         else:
-            self._storage.append(str(data))
-            self._processed_count += 1
+            self._storage.append((self._next_rank, str(data)))
+            self._next_rank += 1
 
 
 class TextProcessor(DataProcessor):
@@ -71,27 +66,29 @@ class TextProcessor(DataProcessor):
             raise ValueError("Improper text data")
         if isinstance(data, list):
             for item in data:
-                self._storage.append(item)
-                self._processed_count += 1
+                self._storage.append((self._next_rank, item))
+                self._next_rank += 1
         else:
-            self._storage.append(data)
-            self._processed_count += 1
+            self._storage.append((self._next_rank, data))
+            self._next_rank += 1
 
 
 class LogProcessor(DataProcessor):
     def validate(self, data: typing.Any) -> bool:
-        if isinstance(data, dict):
-            for key, value in data.items():
+        def is_valid_dict(d: typing.Any) -> bool:
+            if not isinstance(d, dict):
+                return False
+            for key, value in d.items():
                 if not isinstance(key, str) or not isinstance(value, str):
                     return False
             return True
+
+        if is_valid_dict(data):
+            return True
         if isinstance(data, list):
             for item in data:
-                if not isinstance(item, dict):
+                if not is_valid_dict(item):
                     return False
-                for key, value in item.items():
-                    if not isinstance(key, str) or not isinstance(value, str):
-                        return False
             return True
         return False
 
@@ -100,14 +97,16 @@ class LogProcessor(DataProcessor):
             raise ValueError("Improper log data")
         if isinstance(data, list):
             for item in data:
-                self._storage.append(self._format_log(item))
-                self._processed_count += 1
+                self._storage.append((self._next_rank, self._format_log(item)))
+                self._next_rank += 1
         else:
-            self._storage.append(self._format_log(data))
-            self._processed_count += 1
+            self._storage.append((self._next_rank, self._format_log(data)))
+            self._next_rank += 1
 
     def _format_log(self, entry: dict[str, str]) -> str:
-        return f"{entry['log_level']}: {entry['log_message']}"
+        if "log_level" in entry and "log_message" in entry:
+            return f"{entry['log_level']}: {entry['log_message']}"
+        return ", ".join(f"{k}: {v}" for k, v in entry.items())
 
 
 class DataStream:
@@ -138,14 +137,14 @@ class DataStream:
         for proc in self._processors:
             proc_name = type(proc).__name__.replace("Processor", " Processor")
             print(
-                f"{proc_name}: total {proc.total_processed()}"
+                f"{proc_name}: total {proc.get_next_rank()}"
                 f" items processed, remaining {proc.remaining()} on processor"
             )
 
 
 def main() -> None:
     print("=== Code Nexus - Data Stream ===")
-    print("Initialize Data Stream...")
+    print("\nInitialize Data Stream...")
 
     stream = DataStream()
     stream.print_processors_stats()
@@ -171,23 +170,23 @@ def main() -> None:
         ["Hi", "five"],
     ]
 
-    print("Registering Numeric Processor")
+    print("\nRegistering Numeric Processor")
     stream.register_processor(numeric)
 
-    print(f"Send first batch of data on stream: {batch}")
+    print(f"\nSend first batch of data on stream: {batch}")
     stream.process_stream(batch)
     stream.print_processors_stats()
 
-    print("Registering other data processors")
+    print("\nRegistering other data processors")
     stream.register_processor(text)
     stream.register_processor(log)
 
-    print("Send the same batch again")
+    print("\nSend the same batch again")
     stream.process_stream(batch)
     stream.print_processors_stats()
 
     print(
-        "Consume some elements from the "
+        "\nConsume some elements from the "
         "data processors: Numeric 3, Text 2, Log 1"
     )
     for _ in range(3):

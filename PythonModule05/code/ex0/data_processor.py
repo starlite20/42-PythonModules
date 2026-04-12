@@ -4,7 +4,7 @@ import typing
 
 class DataProcessor(ABC):
     def __init__(self) -> None:
-        self._storage: list[str] = []
+        self._storage: list[tuple[int, str]] = []
         self._next_rank: int = 0
 
     @abstractmethod
@@ -16,13 +16,9 @@ class DataProcessor(ABC):
         pass
 
     def output(self) -> tuple[int, str]:
-        if len(self._storage) == 0:
+        if not self._storage:
             raise ValueError("No data available")
-        value = self._storage[0]
-        self._storage = self._storage[1:]
-        rank = self._next_rank
-        self._next_rank += 1
-        return (rank, value)
+        return self._storage.pop(0)
 
 
 class NumericProcessor(DataProcessor):
@@ -41,9 +37,11 @@ class NumericProcessor(DataProcessor):
             raise ValueError("Improper numeric data")
         if isinstance(data, list):
             for item in data:
-                self._storage.append(str(item))
+                self._storage.append((self._next_rank, str(item)))
+                self._next_rank += 1
         else:
-            self._storage.append(str(data))
+            self._storage.append((self._next_rank, str(data)))
+            self._next_rank += 1
 
 
 class TextProcessor(DataProcessor):
@@ -62,25 +60,29 @@ class TextProcessor(DataProcessor):
             raise ValueError("Improper text data")
         if isinstance(data, list):
             for item in data:
-                self._storage.append(item)
+                self._storage.append((self._next_rank, item))
+                self._next_rank += 1
         else:
-            self._storage.append(data)
+            self._storage.append((self._next_rank, data))
+            self._next_rank += 1
 
 
 class LogProcessor(DataProcessor):
     def validate(self, data: typing.Any) -> bool:
-        if isinstance(data, dict):
-            for key, value in data.items():
+        def is_valid_dict(d: typing.Any) -> bool:
+            if not isinstance(d, dict):
+                return False
+            for key, value in d.items():
                 if not isinstance(key, str) or not isinstance(value, str):
                     return False
             return True
+
+        if is_valid_dict(data):
+            return True
         if isinstance(data, list):
             for item in data:
-                if not isinstance(item, dict):
+                if not is_valid_dict(item):
                     return False
-                for key, value in item.items():
-                    if not isinstance(key, str) or not isinstance(value, str):
-                        return False
             return True
         return False
 
@@ -89,14 +91,16 @@ class LogProcessor(DataProcessor):
             raise ValueError("Improper log data")
         if isinstance(data, list):
             for item in data:
-                self._storage.append(self._format_log(item))
+                self._storage.append((self._next_rank, self._format_log(item)))
+                self._next_rank += 1
         else:
-            self._storage.append(self._format_log(data))
+            self._storage.append((self._next_rank, self._format_log(data)))
+            self._next_rank += 1
 
     def _format_log(self, entry: dict[str, str]) -> str:
         if "log_level" in entry and "log_message" in entry:
             return f"{entry['log_level']}: {entry['log_message']}"
-        return str(entry)
+        return ", ".join(f"{k}: {v}" for k, v in entry.items())
 
 
 def main() -> None:
@@ -106,14 +110,16 @@ def main() -> None:
     text = TextProcessor()
     log = LogProcessor()
 
-    print("Testing Numeric Processor...")
+    print("\nTesting Numeric Processor...")
     print(f"Trying to validate input '42': {numeric.validate(42)}")
     print(f"Trying to validate input 'Hello': {numeric.validate('Hello')}")
+
     print("Test invalid ingestion of string 'foo' without prior validation:")
     try:
         numeric.ingest("foo")
     except ValueError as e:
         print(f"Got exception: {e}")
+
     print("Processing data: [1, 2, 3, 4, 5]")
     numeric.ingest([1, 2, 3, 4, 5])
     print("Extracting 3 values...")
@@ -121,15 +127,16 @@ def main() -> None:
         rank, value = numeric.output()
         print(f"Numeric value {rank}: {value}")
 
-    print("Testing Text Processor...")
+    print("\nTesting Text Processor...")
     print(f"Trying to validate input '42': {text.validate(42)}")
+    
     print("Processing data: ['Hello', 'Nexus', 'World']")
     text.ingest(["Hello", "Nexus", "World"])
     print("Extracting 1 value...")
     rank, value = text.output()
     print(f"Text value {rank}: {value}")
 
-    print("Testing Log Processor...")
+    print("\nTesting Log Processor...")
     print(f"Trying to validate input 'Hello': {log.validate('Hello')}")
     logs = [
         {"log_level": "NOTICE", "log_message": "Connection to server"},
