@@ -5,7 +5,7 @@ def main() -> None:
     print("=== Transmutation 2 ===")
     print("Import alchemy module only")
     print("Testing lead to gold: ", end="")
-    print(transmutation.lead_to_gold())
+    print(alchemy.transmutation.lead_to_gold())
 
 
 if __name__ == "__main__":

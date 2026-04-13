@@ -7,5 +7,6 @@ def main() -> None:
     print("Testing create_water: ", end="")
     print(create_water())
 
+
 if __name__ == "__main__":
     main()
