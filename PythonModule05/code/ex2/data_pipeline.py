@@ -4,31 +4,27 @@ import typing
 
 class DataProcessor(ABC):
     def __init__(self) -> None:
-        self._storage: list[str] = []
-        self._processed_count: int = 0
-        self._next_output_rank: int = 0
+        self._storage: list[tuple[int, str]] = []
+        self._next_rank: int = 0
 
     @abstractmethod
     def validate(self, data: typing.Any) -> bool:
-        pass
+        ...
 
     @abstractmethod
     def ingest(self, data: typing.Any) -> None:
-        pass
+        ...
 
     def output(self) -> tuple[int, str]:
-        if len(self._storage) == 0:
+        if not self._storage:
             raise ValueError("No data available")
-        value = self._storage.pop(0)
-        rank = self._next_output_rank
-        self._next_output_rank += 1
-        return (rank, value)
+        return self._storage.pop(0)
 
     def remaining(self) -> int:
         return len(self._storage)
 
-    def total_processed(self) -> int:
-        return self._processed_count
+    def get_next_rank(self) -> int:
+        return self._next_rank
 
 
 class NumericProcessor(DataProcessor):
@@ -39,7 +35,9 @@ class NumericProcessor(DataProcessor):
             return True
         if isinstance(data, list):
             for item in data:
-                if isinstance(item, bool) or not isinstance(item, (int, float)):
+                if isinstance(item, bool):
+                    return False
+                if not isinstance(item, (int, float)):
                     return False
             return True
         return False
@@ -49,19 +47,23 @@ class NumericProcessor(DataProcessor):
             raise ValueError("Improper numeric data")
         if isinstance(data, list):
             for item in data:
-                self._storage.append(str(item))
-                self._processed_count += 1
+                self._storage.append((self._next_rank, str(item)))
+                self._next_rank += 1
         else:
-            self._storage.append(str(data))
-            self._processed_count += 1
+            self._storage.append((self._next_rank, str(data)))
+            self._next_rank += 1
 
 
 class TextProcessor(DataProcessor):
     def validate(self, data: typing.Any) -> bool:
+        if isinstance(data, bool):
+            return False
         if isinstance(data, str):
             return True
         if isinstance(data, list):
             for item in data:
+                if isinstance(item, bool):
+                    return False
                 if not isinstance(item, str):
                     return False
             return True
@@ -72,27 +74,29 @@ class TextProcessor(DataProcessor):
             raise ValueError("Improper text data")
         if isinstance(data, list):
             for item in data:
-                self._storage.append(item)
-                self._processed_count += 1
+                self._storage.append((self._next_rank, item))
+                self._next_rank += 1
         else:
-            self._storage.append(data)
-            self._processed_count += 1
+            self._storage.append((self._next_rank, data))
+            self._next_rank += 1
 
 
 class LogProcessor(DataProcessor):
     def validate(self, data: typing.Any) -> bool:
-        if isinstance(data, dict):
-            for key, value in data.items():
+        def is_valid_dict(d: typing.Any) -> bool:
+            if not isinstance(d, dict):
+                return False
+            for key, value in d.items():
                 if not isinstance(key, str) or not isinstance(value, str):
                     return False
             return True
+
+        if is_valid_dict(data):
+            return True
         if isinstance(data, list):
             for item in data:
-                if not isinstance(item, dict):
+                if not is_valid_dict(item):
                     return False
-                for key, value in item.items():
-                    if not isinstance(key, str) or not isinstance(value, str):
-                        return False
             return True
         return False
 
@@ -101,14 +105,20 @@ class LogProcessor(DataProcessor):
             raise ValueError("Improper log data")
         if isinstance(data, list):
             for item in data:
-                self._storage.append(self._format_log(item))
-                self._processed_count += 1
+                self._storage.append((self._next_rank, self._format_log(item)))
+                self._next_rank += 1
         else:
-            self._storage.append(self._format_log(data))
-            self._processed_count += 1
+            self._storage.append((self._next_rank, self._format_log(data)))
+            self._next_rank += 1
 
     def _format_log(self, entry: dict[str, str]) -> str:
-        return f"{entry['log_level']}: {entry['log_message']}"
+        if "log_level" in entry and "log_message" in entry:
+            return f"{entry['log_level']}: {entry['log_message']}"
+        parts = []
+        for key, val in entry.items():
+            parts.append(f"{key}: {val}")
+
+        return ", ".join(parts)
 
 
 class ExportPlugin(typing.Protocol):
@@ -151,7 +161,9 @@ class DataStream:
                     handled = True
                     break
             if not handled:
-                print(f"DataStream error - Can't process element in stream: {element}")
+                print(
+                    f"DataStream error - "
+                    f"Can't process element in stream: {element}")
 
     def print_processors_stats(self) -> None:
         print("== DataStream statistics ==")
@@ -161,8 +173,8 @@ class DataStream:
         for proc in self._processors:
             proc_name = type(proc).__name__.replace("Processor", " Processor")
             print(
-                f"{proc_name}: total {proc.total_processed()} items processed, "
-                f"remaining {proc.remaining()} on processor"
+                f"{proc_name}: total {proc.get_next_rank()}"
+                f" items processed, remaining {proc.remaining()} on processor"
             )
 
     def output_pipeline(self, nb: int, plugin: ExportPlugin) -> None:

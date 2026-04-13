@@ -9,11 +9,11 @@ class DataProcessor(ABC):
 
     @abstractmethod
     def validate(self, data: typing.Any) -> bool:
-        pass
+        ...
 
     @abstractmethod
     def ingest(self, data: typing.Any) -> None:
-        pass
+        ...
 
     def output(self) -> tuple[int, str]:
         if not self._storage:
@@ -23,10 +23,14 @@ class DataProcessor(ABC):
 
 class NumericProcessor(DataProcessor):
     def validate(self, data: typing.Any) -> bool:
+        if isinstance(data, bool):
+            return False
         if isinstance(data, (int, float)):
             return True
         if isinstance(data, list):
             for item in data:
+                if isinstance(item, bool):
+                    return False
                 if not isinstance(item, (int, float)):
                     return False
             return True
@@ -46,10 +50,14 @@ class NumericProcessor(DataProcessor):
 
 class TextProcessor(DataProcessor):
     def validate(self, data: typing.Any) -> bool:
+        if isinstance(data, bool):
+            return False
         if isinstance(data, str):
             return True
         if isinstance(data, list):
             for item in data:
+                if isinstance(item, bool):
+                    return False
                 if not isinstance(item, str):
                     return False
             return True
@@ -100,7 +108,11 @@ class LogProcessor(DataProcessor):
     def _format_log(self, entry: dict[str, str]) -> str:
         if "log_level" in entry and "log_message" in entry:
             return f"{entry['log_level']}: {entry['log_message']}"
-        return ", ".join(f"{k}: {v}" for k, v in entry.items())
+        parts = []
+        for key, val in entry.items():
+            parts.append(f"{key}: {val}")
+
+        return ", ".join(parts)
 
 
 def main() -> None:
@@ -129,7 +141,7 @@ def main() -> None:
 
     print("\nTesting Text Processor...")
     print(f"Trying to validate input '42': {text.validate(42)}")
-    
+
     print("Processing data: ['Hello', 'Nexus', 'World']")
     text.ingest(["Hello", "Nexus", "World"])
     print("Extracting 1 value...")
