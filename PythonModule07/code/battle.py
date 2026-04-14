@@ -17,7 +17,8 @@ def test_factory(factory: CreatureFactory) -> None:
         print(f"An error occurred while testing factory: {e}")
 
 
-def make_them_fight(factory1: CreatureFactory, factory2: CreatureFactory) -> None:
+def make_them_fight(factory1: CreatureFactory,
+                    factory2: CreatureFactory) -> None:
     """Make the base creatures from two different factories fight."""
     try:
         creature1 = factory1.create_base()
