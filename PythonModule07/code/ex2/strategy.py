@@ -1,68 +1,55 @@
 from abc import ABC, abstractmethod
-from typing import Any
+
+from ex0.creature import Creature
+from ex1.creature import HealCapability, TransformCapability
 
 
 class BattleStrategy(ABC):
-    """Abstract class defining a battle strategy."""
+    @abstractmethod
+    def is_valid(self, creature: Creature) -> bool:
+        ...
 
     @abstractmethod
-    def is_valid(self, creature: Any) -> bool:
-        """Check if the strategy is valid for the creature."""
-        pass
-
-    @abstractmethod
-    def act(self, creature: Any) -> list[str]:
-        """Execute the strategy actions and return log strings."""
-        pass
+    def act(self, creature: Creature) -> list[str]:
+        ...
 
 
 class NormalStrategy(BattleStrategy):
-    """Strategy for basic creatures."""
-
-    def is_valid(self, creature: Any) -> bool:
-        """Suitable for any creature."""
+    def is_valid(self, creature: Creature) -> bool:
         return True
 
-    def act(self, creature: Any) -> list[str]:
-        try:
-            return [creature.attack()]
-        except Exception:
-            return []
+    def act(self, creature: Creature) -> list[str]:
+        return [creature.attack()]
 
 
 class AggressiveStrategy(BattleStrategy):
-    """Strategy for transforming creatures."""
+    def is_valid(self, creature: Creature) -> bool:
+        return isinstance(creature, TransformCapability)
 
-    def is_valid(self, creature: Any) -> bool:
-        """Check for transform capabilities."""
-        return (hasattr(creature, "transform") and
-                hasattr(creature, "revert") and
-                hasattr(creature, "attack"))
-
-    def act(self, creature: Any) -> list[str]:
-        try:
-            return [
-                creature.transform(),
-                creature.attack(),
-                creature.revert()
-            ]
-        except Exception:
-            return []
+    def act(self, creature: Creature) -> list[str]:
+        if not self.is_valid(creature):
+            raise ValueError(
+                f"Invalid Creature '{creature.name}'"
+                f" for this aggressive strategy"
+            )
+        return [
+            creature.transform(),
+            creature.attack(),
+            creature.revert()
+        ]
 
 
 class DefensiveStrategy(BattleStrategy):
-    """Strategy for healing creatures."""
+    def is_valid(self, creature: Creature) -> bool:
+        return isinstance(creature, HealCapability)
 
-    def is_valid(self, creature: Any) -> bool:
-        """Check for healing capabilities."""
-        return (hasattr(creature, "attack") and
-                hasattr(creature, "heal"))
-
-    def act(self, creature: Any) -> list[str]:
-        try:
-            return [
-                creature.attack(),
-                creature.heal()
-            ]
-        except Exception:
-            return []
+    def act(self, creature: Creature) -> list[str]:
+        if not self.is_valid(creature):
+            raise ValueError(
+                f"Invalid Creature '{creature.name}'"
+                f" for this defensive strategy"
+            )
+        return [
+            creature.attack(),
+            creature.heal()
+        ]

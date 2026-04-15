@@ -1,52 +1,28 @@
 from abc import ABC, abstractmethod
 
-
-class Creature(ABC):
-    """Abstract base class representing a Creature card."""
-
-    def __init__(self, name: str, creature_type: str) -> None:
-        self.name = name
-        self.creature_type = creature_type
-
-    @abstractmethod
-    def attack(self) -> str:
-        """Abstract method to perform an attack."""
-        pass
-
-    def describe(self) -> str:
-        """Concrete method returning a standard description."""
-        return f"{self.name} is a {self.creature_type} type creature."
+from ex0.creature import Creature
 
 
 class HealCapability(ABC):
-    """Abstract capability for healing."""
-
     @abstractmethod
     def heal(self) -> str:
-        """Abstract method to heal."""
-        pass
+        ...
 
 
 class TransformCapability(ABC):
-    """Abstract capability for transforming state."""
-
     def __init__(self) -> None:
         self._is_transformed: bool = False
 
     @abstractmethod
     def transform(self) -> str:
-        """Abstract method to transform."""
-        pass
+        ...
 
     @abstractmethod
     def revert(self) -> str:
-        """Abstract method to revert."""
-        pass
+        ...
 
 
 class Sproutling(Creature, HealCapability):
-    """Concrete Grass type base creature with healing."""
-
     def __init__(self) -> None:
         Creature.__init__(self, "Sproutling", "Grass")
 
@@ -54,59 +30,53 @@ class Sproutling(Creature, HealCapability):
         return "Sproutling uses Vine Whip!"
 
     def heal(self) -> str:
-        return "Sproutling uses Absorb to heal!"
+        return "Sproutling heals itself for a small amount"
 
 
 class Bloomelle(Creature, HealCapability):
-    """Concrete Grass type evolved creature with healing."""
-
     def __init__(self) -> None:
-        Creature.__init__(self, "Bloomelle", "Grass")
+        Creature.__init__(self, "Bloomelle", "Grass/Fairy")
 
     def attack(self) -> str:
-        return "Bloomelle uses Solar Beam!"
+        return "Bloomelle uses Petal Dance!"
 
     def heal(self) -> str:
-        return "Bloomelle uses Floral Healing!"
+        return "Bloomelle heals itself and others for a large amount"
 
 
 class Shiftling(Creature, TransformCapability):
-    """Concrete Normal type base creature with transform."""
-
     def __init__(self) -> None:
         Creature.__init__(self, "Shiftling", "Normal")
         TransformCapability.__init__(self)
 
     def attack(self) -> str:
         if self._is_transformed:
-            return "Shiftling uses Shadow Sneak!"
-        return "Shiftling uses Tackle!"
+            return "Shiftling performs a boosted strike!"
+        return "Shiftling attacks normally."
 
     def transform(self) -> str:
         self._is_transformed = True
-        return "Shiftling transforms into a shadowy form!"
+        return "Shiftling shifts into a sharper form!"
 
     def revert(self) -> str:
         self._is_transformed = False
-        return "Shiftling reverts to its normal form!"
+        return "Shiftling returns to normal."
 
 
 class Morphagon(Creature, TransformCapability):
-    """Concrete Normal type evolved creature with transform."""
-
     def __init__(self) -> None:
-        Creature.__init__(self, "Morphagon", "Normal")
+        Creature.__init__(self, "Morphagon", "Normal/Dragon")
         TransformCapability.__init__(self)
 
     def attack(self) -> str:
         if self._is_transformed:
-            return "Morphagon uses Phantom Force!"
-        return "Morphagon uses Slash!"
+            return "Morphagon unleashes a devastating morph strike!"
+        return "Morphagon attacks normally."
 
     def transform(self) -> str:
         self._is_transformed = True
-        return "Morphagon transforms into a phantom form!"
+        return "Morphagon morphs into a dragonic battle form!"
 
     def revert(self) -> str:
         self._is_transformed = False
-        return "Morphagon reverts to its normal form!"
+        return "Morphagon stabilizes its form."
