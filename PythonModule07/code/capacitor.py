@@ -1,8 +1,8 @@
+from typing import cast
+
 from ex0.factory import CreatureFactory
-from ex1 import (
-    HealingCreatureFactory,
-    TransformCreatureFactory,
-)
+from ex1 import HealingCreatureFactory, TransformCreatureFactory
+from ex1.creature import HealCapability, TransformCapability
 
 
 def test_healing_factory(factory: CreatureFactory) -> None:
@@ -13,12 +13,12 @@ def test_healing_factory(factory: CreatureFactory) -> None:
         print("base:")
         print(base.describe())
         print(base.attack())
-        print(base.heal())
+        print(cast(HealCapability, base).heal())
 
         print("evolved:")
         print(evolved.describe())
         print(evolved.attack())
-        print(evolved.heal())
+        print(cast(HealCapability, evolved).heal())
 
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -32,16 +32,18 @@ def test_transform_factory(factory: CreatureFactory) -> None:
         print("base:")
         print(base.describe())
         print(base.attack())
-        print(base.transform())
+        c_base = cast(TransformCapability, base)
+        print(c_base.transform())
         print(base.attack())
-        print(base.revert())
+        print(c_base.revert())
 
         print("evolved:")
         print(evolved.describe())
         print(evolved.attack())
-        print(evolved.transform())
+        c_evolved = cast(TransformCapability, evolved)
+        print(c_evolved.transform())
         print(evolved.attack())
-        print(evolved.revert())
+        print(c_evolved.revert())
 
     except Exception as e:
         print(f"An error occurred: {e}")

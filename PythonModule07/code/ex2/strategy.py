@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import cast
 
 from ex0.creature import Creature
 from ex1.creature import HealCapability, TransformCapability
@@ -32,10 +33,11 @@ class AggressiveStrategy(BattleStrategy):
                 f"Invalid Creature '{creature.name}'"
                 f" for this aggressive strategy"
             )
+        c_transform = cast(TransformCapability, creature)
         return [
-            creature.transform(),
+            c_transform.transform(),
             creature.attack(),
-            creature.revert()
+            c_transform.revert()
         ]
 
 
@@ -49,7 +51,8 @@ class DefensiveStrategy(BattleStrategy):
                 f"Invalid Creature '{creature.name}'"
                 f" for this defensive strategy"
             )
+        c_heal = cast(HealCapability, creature)
         return [
             creature.attack(),
-            creature.heal()
+            c_heal.heal()
         ]
