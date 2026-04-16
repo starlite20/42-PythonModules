@@ -1,6 +1,6 @@
 from typing import cast
 
-from ex0.factory import CreatureFactory
+from ex0 import CreatureFactory
 from ex1 import HealingCreatureFactory, TransformCreatureFactory
 from ex1.creature import HealCapability, TransformCapability
 
