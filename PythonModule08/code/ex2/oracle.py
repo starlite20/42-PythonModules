@@ -1,14 +1,8 @@
 import os
-from typing import Optional
 from dotenv import load_dotenv
 
 
 def load_config() -> dict:
-    """
-    Loads configuration from .env file and environment variables.
-    Returns a dictionary with the configuration values.
-    """
-
     load_dotenv()
 
     config: dict = {
@@ -22,55 +16,43 @@ def load_config() -> dict:
     return config
 
 
-def mask_secret(secret: Optional[str]) -> str:
-    """Helper to hide secrets in logs/output."""
-    if secret:
-        return "*" * 8
-    return "MISSING"
-
-
 def main() -> None:
-    """
-    Main execution flow: Load Config -> Display Status -> Security Check.
-    """
-    print("ORACLE STATUS: Reading the Matrix...")
+    print("\nORACLE STATUS: Reading the Matrix...")
 
     config = load_config()
+
+    for key, value in config.items():
+        if not value:
+            print(f"[WARN] Missing configuration for {key}. Using default.")
 
     mode = config.get("MATRIX_MODE") or "development"
 
     if mode == "production":
-        db_msg = "Connected to production cluster"
-        api_status = "Authenticated (High Security)"
-        key_display = mask_secret(config.get("API_KEY"))
+        db_msg = "Connected to production instance"
+        api_status = "Authenticated (Production)"
     else:
         db_msg = "Connected to local instance"
-        api_status = "Authenticated (Debug Mode)"
-        key_display = config.get("API_KEY") or "MISSING"
+        api_status = "Authenticated"
 
-    print("Configuration loaded:")
-    print(f"  Mode: {mode}")
-    print(f"  Database: {db_msg}")
-    print(f"  API Access: {api_status}")
-    print(f"  Log Level: {config.get('LOG_LEVEL') or 'INFO'}")
+    print("\nConfiguration loaded:")
+    print(f"Mode: {mode}")
+    print(f"Database: {db_msg}")
+    print(f"API Access: {api_status}")
+    print(f"Log Level: {config.get('LOG_LEVEL') or 'INFO'}")
     print(
-        f"  Zion Network: "
+        f"Zion Network: "
         f"{'Online' if config.get('ZION_ENDPOINT') else 'Offline'}"
     )
-    print(f"  API Key Check: {key_display}")
+
     print("\nEnvironment security check:")
-    print("  [OK] No hardcoded secrets detected")
+    print("[OK] No hardcoded secrets detected")
 
-    env_exists = os.path.exists(".env")
-    print(
-        f"  [{'OK' if env_exists else 'WARN'}] .env file "
-        f"{'found' if env_exists else 'not found'}"
-    )
-
-    if any(config.values()):
-        print("  [OK] Production overrides available")
+    if os.path.exists(".env"):
+        print("[OK] .env file properly configured")
     else:
-        print("  [WARN] No configuration loaded")
+        print("[WARN] .env file not found")
+
+    print("[OK] Production overrides available")
 
     print("\nThe Oracle sees all configurations.")
 

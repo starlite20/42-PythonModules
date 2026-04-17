@@ -46,7 +46,7 @@ def consolidate_python_files(source_dir, output_file):
 
 if __name__ == "__main__":
     # CONFIGURATION: Change these to your needs
-    TARGET_DIRECTORY = r"C:\Users\Suhail\Downloads\42-PythonModules-main\42-PythonModules-main\PythonModule08\code"
+    TARGET_DIRECTORY = r"/home/suhail/Documents/github/42-PythonModules/PythonModule08/code"
     OUTPUT_FILENAME = "codebase_summary.txt"
 
     consolidate_python_files(TARGET_DIRECTORY, OUTPUT_FILENAME)
