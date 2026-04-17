@@ -25,9 +25,9 @@ def make_them_fight(
         creature2 = factory2.create_base()
 
         print(creature1.describe())
-        print("vs.")
+        print(" vs.")
         print(creature2.describe())
-        print("fight!")
+        print(" fight!")
         print(creature1.attack())
         print(creature2.attack())
 

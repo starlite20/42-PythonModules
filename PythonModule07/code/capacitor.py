@@ -10,12 +10,12 @@ def test_healing_factory(factory: CreatureFactory) -> None:
         base = factory.create_base()
         evolved = factory.create_evolved()
 
-        print("base:")
+        print(" base:")
         print(base.describe())
         print(base.attack())
         print(cast(HealCapability, base).heal())
 
-        print("evolved:")
+        print(" evolved:")
         print(evolved.describe())
         print(evolved.attack())
         print(cast(HealCapability, evolved).heal())
@@ -29,7 +29,7 @@ def test_transform_factory(factory: CreatureFactory) -> None:
         base = factory.create_base()
         evolved = factory.create_evolved()
 
-        print("base:")
+        print(" base:")
         print(base.describe())
         print(base.attack())
         c_base = cast(TransformCapability, base)
@@ -37,7 +37,7 @@ def test_transform_factory(factory: CreatureFactory) -> None:
         print(base.attack())
         print(c_base.revert())
 
-        print("evolved:")
+        print(" evolved:")
         print(evolved.describe())
         print(evolved.attack())
         c_evolved = cast(TransformCapability, evolved)

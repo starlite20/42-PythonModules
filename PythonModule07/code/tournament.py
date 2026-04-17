@@ -29,11 +29,11 @@ def run_tournament(
             c1: Creature = factory1.create_base()
             c2: Creature = factory2.create_base()
 
-            print("* Battle *")
+            print("\n* Battle *")
             print(f"{c1.describe()}")
-            print("vs.")
+            print(" vs.")
             print(f"{c2.describe()}")
-            print("now fight!")
+            print(" now fight!")
 
             try:
                 for action in strat1.act(c1):
