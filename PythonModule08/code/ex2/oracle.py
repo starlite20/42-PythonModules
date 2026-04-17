@@ -1,5 +1,4 @@
 import os
-import sys
 from typing import Optional
 from dotenv import load_dotenv
 
@@ -55,13 +54,18 @@ def main() -> None:
     print(f"  API Access: {api_status}")
     print(f"  Log Level: {config.get('LOG_LEVEL') or 'INFO'}")
     print(
-        f"  Zion Network: {'Online' if config.get('ZION_ENDPOINT') else 'Offline'}")
+        f"  Zion Network: "
+        f"{'Online' if config.get('ZION_ENDPOINT') else 'Offline'}"
+    )
     print(f"  API Key Check: {key_display}")
     print("\nEnvironment security check:")
     print("  [OK] No hardcoded secrets detected")
 
     env_exists = os.path.exists(".env")
-    print(f"  [{'OK' if env_exists else 'WARN'}] .env file {'found' if env_exists else 'not found'}")
+    print(
+        f"  [{'OK' if env_exists else 'WARN'}] .env file "
+        f"{'found' if env_exists else 'not found'}"
+    )
 
     if any(config.values()):
         print("  [OK] Production overrides available")
