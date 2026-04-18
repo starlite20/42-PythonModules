@@ -108,6 +108,7 @@ class SpaceMission(BaseModel):
 
         return self
 
+
 def test_from_generated_json() -> None:
     filepath = "../../generated_data/space_missions.json"
     try:
@@ -196,7 +197,7 @@ def main() -> None:
     try:
         mission = SpaceMission.model_validate(valid_data)
         print_mission_data(mission)
-        
+
     except ValidationError as e:
         print(f"Unexpected error: {e}")
 
