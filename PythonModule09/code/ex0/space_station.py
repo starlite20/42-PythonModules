@@ -7,27 +7,22 @@ from pydantic import BaseModel, Field, ValidationError
 class SpaceStation(BaseModel):
     station_id: str = Field(
         min_length=3, max_length=10,
-        default="IS0000",
         description="station Serial ID"
     )
     name: str = Field(
         min_length=1, max_length=50,
-        default="ssujaude",
         description="Name of the Station"
     )
     crew_size: int = Field(
         ge=1, le=20,
-        default=10,
         description="Max crew capacity"
     )
     power_level: float = Field(
         ge=0.0, le=100.0,
-        default=100.0,
         description="Current Power Level"
     )
     oxygen_level: float = Field(
         ge=0.0, le=100.0,
-        default=100.0,
         description="Current Oxygen Level"
     )
     last_maintenance: datetime
@@ -52,7 +47,7 @@ def main() -> None:
     }
 
     try:
-        station = SpaceStation(**valid_data)
+        station = SpaceStation.model_validate(valid_data)
         print("Valid station created:")
         print(f"ID: {station.station_id}")
         print(f"Name: {station.name}")
@@ -72,7 +67,7 @@ def main() -> None:
 
     print("Expected validation error:")
     try:
-        SpaceStation(**invalid_data)
+        SpaceStation.model_validate(invalid_data)
     except ValidationError as e:
         # Extracting the exact standard Pydantic v2 error message
         print(e.errors()[0]['msg'])

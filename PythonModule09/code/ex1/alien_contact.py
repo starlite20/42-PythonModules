@@ -16,29 +16,24 @@ class ContactType(str, Enum):
 class AlienContact(BaseModel):
     contact_id: str = Field(
         min_length=5, max_length=15,
-        default="00000",
         description="Contact ID of Alien"
     )
     timestamp: datetime
     location: str = Field(
         min_length=3, max_length=100,
-        default="Unknown",
         description="Location of Alien Identification"
     )
     contact_type: ContactType
     signal_strength: float = Field(
         ge=0.0, le=10.0,
-        default=0.0,
         description="Signal Strenght of Contact"
     )
     duration_minutes: int = Field(
         ge=1, le=1440,
-        default=1.0,
         description="Duration of Contact"
     )
     witness_count: int = Field(
         ge=1, le=100,
-        default=1,
         description="Number of Witnesses"
     )
     message_received: Optional[str] = Field(
@@ -93,7 +88,7 @@ def main() -> None:
     }
 
     try:
-        contact = AlienContact(**valid_data)
+        contact = AlienContact.model_validate(valid_data)
         print("Valid contact report:")
         print(f"ID: {contact.contact_id}")
         print(f"Type: {contact.contact_type.value}")
@@ -114,7 +109,7 @@ def main() -> None:
 
     print("Expected validation error:")
     try:
-        AlienContact(**invalid_data)
+        AlienContact.model_validate(invalid_data)
     except ValidationError as e:
         print(e.errors()[0]['msg'])
 
