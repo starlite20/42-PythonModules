@@ -34,7 +34,6 @@ class SpaceStation(BaseModel):
     is_operational: bool = True
     notes: Optional[str] = Field(
         default=None, max_length=200,
-        default="",
         description="Additional Notes about Space Station (optional)"
     )
 
