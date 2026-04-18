@@ -1,7 +1,7 @@
 from datetime import datetime
 from enum import Enum
 from typing import Optional
-
+import json
 from pydantic import BaseModel, Field, ValidationError, model_validator
 from pydantic_core import PydanticCustomError
 
@@ -72,6 +72,46 @@ class AlienContact(BaseModel):
         return self
 
 
+def test_from_generated_json() -> None:
+    filepath = "../../generated_data/alien_contacts.json"
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            raw_data = json.load(f)
+
+        print("\nTesting with Generated JSON Data")
+        print("=" * 40)
+
+        valid_count = 0
+        invalid_count = 0
+
+        for item in raw_data:
+            try:
+                contact = AlienContact.model_validate(item)
+                print_contact_data(contact)
+                valid_count += 1
+            except ValidationError:
+                invalid_count += 1
+
+        print(f"Successfully validated {valid_count} contacts from JSON.")
+        if invalid_count > 0:
+            print(f"Rejected {invalid_count} invalid contacts from JSON.")
+
+    except FileNotFoundError:
+        print("File not found!")
+        pass
+
+
+def print_contact_data(contact: AlienContact) -> None:
+    print("Valid contact report:")
+    print(f"ID: {contact.contact_id}")
+    print(f"Type: {contact.contact_type.value}")
+    print(f"Location: {contact.location}")
+    print(f"Signal: {contact.signal_strength}/10")
+    print(f"Duration: {contact.duration_minutes} minutes")
+    print(f"Witnesses: {contact.witness_count}")
+    print(f"Message: '{contact.message_received}'\n")
+
+
 def main() -> None:
     print("Alien Contact Log Validation")
     print("=" * 40)
@@ -89,18 +129,11 @@ def main() -> None:
 
     try:
         contact = AlienContact.model_validate(valid_data)
-        print("Valid contact report:")
-        print(f"ID: {contact.contact_id}")
-        print(f"Type: {contact.contact_type.value}")
-        print(f"Location: {contact.location}")
-        print(f"Signal: {contact.signal_strength}/10")
-        print(f"Duration: {contact.duration_minutes} minutes")
-        print(f"Witnesses: {contact.witness_count}")
-        print(f"Message: '{contact.message_received}'")
+        print_contact_data(contact)
+
     except ValidationError as e:
         print(f"Unexpected error: {e}")
 
-    print("\n", end="")
     print("=" * 40)
 
     invalid_data = valid_data.copy()

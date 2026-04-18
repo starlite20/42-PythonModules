@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
-
 from pydantic import BaseModel, Field, ValidationError
+import json
 
 
 class SpaceStation(BaseModel):
@@ -33,6 +33,46 @@ class SpaceStation(BaseModel):
     )
 
 
+def test_from_generated_json() -> None:
+    filepath = "../../generated_data/space_stations.json"
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            raw_data = json.load(f)
+
+        print("\nTesting with Generated JSON Data")
+        print("=" * 40)
+
+        valid_count = 0
+        invalid_count = 0
+
+        for item in raw_data:
+            try:
+                station = SpaceStation.model_validate(item)
+                print_station_data(station)
+                valid_count += 1
+            except ValidationError:
+                invalid_count += 1
+
+        print(f"Successfully validated {valid_count} stations from JSON.")
+        if invalid_count > 0:
+            print(f"Rejected {invalid_count} invalid stations from JSON.")
+
+    except FileNotFoundError:
+        print("File not found!")
+        pass
+
+
+def print_station_data(station: SpaceStation) -> None:
+    print("Valid station created:")
+    print(f"ID: {station.station_id}")
+    print(f"Name: {station.name}")
+    print(f"Crew: {station.crew_size} people")
+    print(f"Power: {station.power_level}%")
+    print(f"Oxygen: {station.oxygen_level}%")
+    status = "Operational" if station.is_operational else "Down"
+    print(f"Status: {status}\n")
+
+
 def main() -> None:
     print("Space Station Data Validation")
     print("=" * 40)
@@ -48,18 +88,11 @@ def main() -> None:
 
     try:
         station = SpaceStation.model_validate(valid_data)
-        print("Valid station created:")
-        print(f"ID: {station.station_id}")
-        print(f"Name: {station.name}")
-        print(f"Crew: {station.crew_size} people")
-        print(f"Power: {station.power_level}%")
-        print(f"Oxygen: {station.oxygen_level}%")
-        status = "Operational" if station.is_operational else "Down"
-        print(f"Status: {status}")
+        print_station_data(station)
+
     except ValidationError as e:
         print(f"Unexpected error: {e}")
 
-    print("\n", end="")
     print("=" * 40)
 
     invalid_data = valid_data.copy()
@@ -69,7 +102,6 @@ def main() -> None:
     try:
         SpaceStation.model_validate(invalid_data)
     except ValidationError as e:
-        # Extracting the exact standard Pydantic v2 error message
         print(e.errors()[0]['msg'])
 
 

@@ -1,6 +1,6 @@
 from datetime import datetime
 from enum import Enum
-
+import json
 from pydantic import BaseModel, Field, ValidationError, model_validator
 from pydantic_core import PydanticCustomError
 
@@ -108,6 +108,51 @@ class SpaceMission(BaseModel):
 
         return self
 
+def test_from_generated_json() -> None:
+    filepath = "../../generated_data/space_missions.json"
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            raw_data = json.load(f)
+
+        print("\nTesting with Generated JSON Data")
+        print("=" * 40)
+
+        valid_count = 0
+        invalid_count = 0
+
+        for item in raw_data:
+            try:
+                mission = SpaceMission.model_validate(item)
+                print_mission_data(mission)
+                valid_count += 1
+            except ValidationError:
+                invalid_count += 1
+
+        print(f"Successfully validated {valid_count} missions from JSON.")
+        if invalid_count > 0:
+            print(f"Rejected {invalid_count} invalid missions from JSON.")
+
+    except FileNotFoundError:
+        print("File not found!")
+        pass
+
+
+def print_mission_data(mission: SpaceMission) -> None:
+    print("Valid mission created:")
+    print(f"Mission: {mission.mission_name}")
+    print(f"ID: {mission.mission_id}")
+    print(f"Destination: {mission.destination}")
+    print(f"Duration: {mission.duration_days} days")
+    print(f"Budget: ${mission.budget_millions}M")
+    print(f"Crew size: {len(mission.crew)}")
+    print("Crew members:")
+    for member in mission.crew:
+        print(
+            f"- {member.name} ({member.rank.value})"
+            f" - {member.specialization}"
+        )
+    print("\n", end="")
+
 
 def main() -> None:
     print("Space Mission Crew Validation")
@@ -150,19 +195,8 @@ def main() -> None:
 
     try:
         mission = SpaceMission.model_validate(valid_data)
-        print("Valid mission created:")
-        print(f"Mission: {mission.mission_name}")
-        print(f"ID: {mission.mission_id}")
-        print(f"Destination: {mission.destination}")
-        print(f"Duration: {mission.duration_days} days")
-        print(f"Budget: ${mission.budget_millions}M")
-        print(f"Crew size: {len(mission.crew)}")
-        print("Crew members:")
-        for member in mission.crew:
-            print(
-                f"- {member.name} ({member.rank.value})"
-                f" - {member.specialization}"
-            )
+        print_mission_data(mission)
+        
     except ValidationError as e:
         print(f"Unexpected error: {e}")
 
