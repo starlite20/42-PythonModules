@@ -26,7 +26,7 @@ class AlienContact(BaseModel):
     contact_type: ContactType
     signal_strength: float = Field(
         ge=0.0, le=10.0,
-        description="Signal Strenght of Contact"
+        description="Signal Strength of Contact"
     )
     duration_minutes: int = Field(
         ge=1, le=1440,
